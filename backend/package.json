@@ -5,15 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/app.ts",
+    "start": "ts-node ./app.ts",
     "build": "./node_modules/.bin/tsc",
-    "serve": "node dist/app.js"
+    "serve": "node dist/app.js",
+    "dev": "ts-node-dev --respawn --transpile-only ./app.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
