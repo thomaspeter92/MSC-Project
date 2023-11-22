@@ -1,9 +1,21 @@
-import express, { Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
+import cors from 'cors'
 
-const app = express();
+
+
+const app: Application = express();
 const port = process.env.PORT || 8080;
 
-app.get("/", (req: Request, res: Response) => {
+app.use(cors())
+
+
+const respondToHello = async (req, res) => {
+  res.json({hello: 'hi'})
+}
+
+app.get("/hello", respondToHello)
+
+app.get("/npm", (req: Request, res: Response) => {
   res.send("Hello, TypeScript Expresskjnkjbnknknbkjk hehehhhhlkjklnhknhe!");
 });
 
