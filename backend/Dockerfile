@@ -26,4 +26,4 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 8080
 
-CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "./app.ts"]
+CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "./src/app.ts"]
