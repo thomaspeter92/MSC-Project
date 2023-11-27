@@ -20,24 +20,29 @@ export const getUserById = async (
 ) => {
   try {
     const user = await prisma.user.findUnique({
-        where: {
-          id: Number(req.params.id)
-        }
-    })
-      if(!user) return next(new ErrorResponse(404,'No user found'))
-      res.status(200).send(user)
+      where: {
+        id: Number(req.params.id),
+      },
+    });
+    if (!user) return next(new ErrorResponse(404, "No user found"));
+    res.status(200).send(user);
   } catch (error) {
-    next(new ErrorResponse(404, 'User not found'))
+    next(new ErrorResponse(404, "User not found"));
   }
-}
+};
 
-export const handleSignUp = async (req: Request, res: Response, next: NextFunction) => {
+export const handleSignUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    let fb = await firebaseService.createUser({email:'tomas@test.com'})
-    console.log(res)
-    res.status(200).json({})
+    let fb = await firebaseService.createUser({ email: "tomas@test.com" });
+    console.log(res);
+
+    res.status(200).json({});
   } catch (error) {
-    console.log(error)
-    next(new ErrorResponse(500, 'Firebase Failed'))
+    console.log(error);
+    next(new ErrorResponse(500, "Firebase Failed"));
   }
-}
+};
