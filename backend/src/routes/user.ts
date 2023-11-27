@@ -9,7 +9,7 @@ userRouter.get("/all", getAllUsers);
 userRouter.get('/:id', getUserById)
 
 // create user
-userRouter.get('/create/new', handleSignUp)
+userRouter.post('/signup', handleSignUp)
 
 // edit user
 

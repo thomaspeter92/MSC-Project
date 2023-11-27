@@ -17,6 +17,7 @@ const app: Application = express();
 
 // MIDDLEWARE
 app.use(cors());
+app.use(express.json())
 // app.use(logger());
 
 // MOUNT ROUTERS
