@@ -3,6 +3,7 @@ import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import firebaseService from "../../lib/firebase/firebaseService";
 import { Sex } from "@prisma/client";
+import { UserRecord } from "firebase-admin/lib/auth/user-record";
 
 export const getAllUsers = async (
   req: Request,
@@ -49,31 +50,42 @@ export const handleSignUp = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body)
+    let fbUser = null;
+    let dbUser = null;
+  
     // validate inputs
     const requestBody: SignUpRequestBody = req.body
 
-    // post to firebase
-    let fbUser = await firebaseService.createUser({email: requestBody.email, password: requestBody.password});
+    try {
+      // post to firebase
+      fbUser = await firebaseService.createUser({email: requestBody.email, password: requestBody.password});
+    } catch (error) {
+      throw error
+    }
 
-    // post to db
-    let dbUser = await prisma.user.create({
-      data: {
-        email: requestBody.email,
-        first_name: requestBody.first_name,
-        last_name: requestBody.last_name,
-        age: Number(requestBody.age),
-        sex: requestBody.sex,
-        username: requestBody.username,
-        verified: false
-      }
-    })
+    try {
+      // post to db
+      dbUser = await prisma.user.create({
+        data: {
+          email: requestBody.email,
+          first_name: requestBody.first_name,
+          last_name: requestBody.last_name,
+          age: Number(requestBody.age),
+          sex: requestBody.sex,
+          username: requestBody.username,
+          verified: false
+        }
+      })
+    } catch (error) {
+      // roll back firebase if db failed
+      await firebaseService.deleteUser(fbUser!.uid)
+      throw error
+    }
     // Send success response.
     res.status(200).json({
       success: true,
       message: "User successfully signed up"
-    });
-    // roll back firebase if db fails
+    });    
   } catch (error) {
     next(error);
   }
