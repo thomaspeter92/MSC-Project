@@ -4,6 +4,7 @@ import ErrorResponse from "../../utils/errorResponse";
 import firebaseService from "../../lib/firebase/firebaseService";
 import { Sex } from "@prisma/client";
 import { UserRecord } from "firebase-admin/lib/auth/user-record";
+import { firebaseAuth } from "../../lib/firebase/firebaseInit";
 
 export const getAllUsers = async (
   req: Request,
@@ -78,6 +79,9 @@ export const handleSignUp = async (
       })
     } catch (error) {
       // roll back firebase if db failed
+      // if the rollback fails, how to handle it?
+      // MAYBE: allow user to log in but then transfer them to a complete account page where they'll be required to fill in
+      // the missing details and repost to the DB???
       await firebaseService.deleteUser(fbUser!.uid)
       throw error
     }
@@ -90,3 +94,15 @@ export const handleSignUp = async (
     next(error);
   }
 };
+
+
+export const handleSignIn = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let token = req.headers.authorization?.replace('Bearer ', '')
+    let user = await firebaseAuth.verifyIdToken(token ? token : '')
+    console.log(user.email)
+    res.status(200).send({token: token})
+  } catch (error) {
+    
+  }
+}

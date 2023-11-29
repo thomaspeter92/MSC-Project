@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllUsers, getUserById, handleSignUp } from "../controllers/user/userController";
+import { getAllUsers, getUserById, handleSignUp, handleSignIn } from "../controllers/user/userController";
 
 export const userRouter: Router = Router();
 
@@ -10,6 +10,9 @@ userRouter.get('/:id', getUserById)
 
 // create user
 userRouter.post('/signup', handleSignUp)
+
+// sign in
+userRouter.post('/signin', handleSignIn)
 
 // edit user
 
