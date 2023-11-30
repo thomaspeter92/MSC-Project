@@ -3,8 +3,8 @@ import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import firebaseService from "../../lib/firebase/firebaseService";
 import { Sex } from "@prisma/client";
-import { UserRecord } from "firebase-admin/lib/auth/user-record";
 import { firebaseAuth } from "../../lib/firebase/firebaseInit";
+import { getBearerToken } from "../../utils/getBearerToken";
 
 export const getAllUsers = async (
   req: Request,
@@ -43,7 +43,7 @@ type SignUpRequestBody = {
   last_name: string;
   sex: Sex;
   username: string;
-}
+};
 
 export const handleSignUp = async (
   req: Request,
@@ -53,15 +53,18 @@ export const handleSignUp = async (
   try {
     let fbUser = null;
     let dbUser = null;
-  
+
     // validate inputs
-    const requestBody: SignUpRequestBody = req.body
+    const requestBody: SignUpRequestBody = req.body;
 
     try {
       // post to firebase
-      fbUser = await firebaseService.createUser({email: requestBody.email, password: requestBody.password});
+      fbUser = await firebaseService.createUser({
+        email: requestBody.email,
+        password: requestBody.password,
+      });
     } catch (error) {
-      throw error
+      throw error;
     }
 
     try {
@@ -74,35 +77,42 @@ export const handleSignUp = async (
           age: Number(requestBody.age),
           sex: requestBody.sex,
           username: requestBody.username,
-          verified: false
-        }
-      })
+          verified: false,
+        },
+      });
     } catch (error) {
       // roll back firebase if db failed
       // if the rollback fails, how to handle it?
       // MAYBE: allow user to log in but then transfer them to a complete account page where they'll be required to fill in
       // the missing details and repost to the DB???
-      await firebaseService.deleteUser(fbUser!.uid)
-      throw error
+      await firebaseService.deleteUser(fbUser!.uid);
+      throw error;
     }
     // Send success response.
     res.status(200).json({
       success: true,
-      message: "User successfully signed up"
-    });    
+      message: "User successfully signed up",
+    });
   } catch (error) {
     next(error);
   }
 };
 
-
-export const handleSignIn = async (req: Request, res: Response, next: NextFunction) => {
+export const handleSignIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    let token = req.headers.authorization?.replace('Bearer ', '')
-    let user = await firebaseAuth.verifyIdToken(token ? token : '')
-    console.log(user.email)
-    res.status(200).send({token: token})
+    let token = getBearerToken(req.headers.authorization || "");
+    let user = await firebaseAuth.verifyIdToken(token ? token : "");
+
+    // if token is verified, get user data from the db and return it to the frontend, save in state/cookie/localstorage?
+    // also update the last_active value in the db with now()
+
+    res.status(200).send({ token: token });
   } catch (error) {
-    
+    console.log(error);
+    next(error);
   }
-}
+};
