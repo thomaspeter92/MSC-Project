@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import firebaseService from "../../lib/firebase/firebaseService";
-import { Sex } from "@prisma/client";
+import { Sex, User } from "@prisma/client";
 import { firebaseAuth } from "../../lib/firebase/firebaseInit";
 import { getBearerToken } from "../../utils/getBearerToken";
 
@@ -104,13 +104,21 @@ export const handleSignIn = async (
   next: NextFunction
 ) => {
   try {
-    let token = getBearerToken(req.headers.authorization || "");
-    let user = await firebaseAuth.verifyIdToken(token ? token : "");
+    const token = getBearerToken(req.headers.authorization || "");
+    const user = await firebaseAuth.verifyIdToken(token ? token : "");
+
+    const dbUser  = await prisma.user.findUnique({
+      where: {
+        email: 'hehe'
+      }
+    })    
+
+    if(!dbUser) return next(new ErrorResponse(401, 'User not found in DB'))
 
     // if token is verified, get user data from the db and return it to the frontend, save in state/cookie/localstorage?
     // also update the last_active value in the db with now()
 
-    res.status(200).send({ token: token });
+    res.status(200).json(dbUser);
   } catch (error) {
     console.log(error);
     next(error);

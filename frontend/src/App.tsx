@@ -18,7 +18,7 @@ function App() {
   const signIn = async () => {
     let res = await signInWithEmailAndPassword(
       auth,
-      "tomas92@test.com",
+      "tomas@test.com",
       "password123"
     );
     console.log(res);
