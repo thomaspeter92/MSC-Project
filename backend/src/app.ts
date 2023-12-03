@@ -33,3 +33,29 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
+
+/*
+TO-DO:
+
+AUTH:
+  - login 
+  - signup
+  - add last active to DB
+  - integrate google login
+
+  USER:
+    - edit profile
+    - 
+
+  CONNECTIONS:
+    - add
+    - block
+    - 
+
+
+
+
+
+
+*/

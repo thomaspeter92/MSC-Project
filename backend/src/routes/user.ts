@@ -1,18 +1,18 @@
 import { Router } from "express";
-import { getAllUsers, getUserById, handleSignUp, handleSignIn } from "../controllers/user/userController";
+import userController from "../controllers/user";
 
 export const userRouter: Router = Router();
 
-userRouter.get("/all", getAllUsers);
+userRouter.get("/all", (req,res,next) => userController.getAllUsers(req,res,next));
 
 // get user
-userRouter.get('/:id', getUserById)
+userRouter.get('/:id', userController.getUserById)
 
 // create user
-userRouter.post('/signup', handleSignUp)
+userRouter.post('/signup', userController.handleSignUp)
 
 // sign in
-userRouter.post('/signin', handleSignIn)
+userRouter.post('/signin',userController.handleSignIn)
 
 // edit user
 

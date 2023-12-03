@@ -7,28 +7,28 @@ import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 const errorHandler = (
   err: ErrorResponse & FirebaseError,
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
+
   let error: ErrorResponse;
 
   // Check if FIREBASE ERROR.
   if (err.code in firebaseErrors) {
-    let message =
-      firebaseErrors[err.code as keyof typeof firebaseErrors].message ||
-      "An error occured.";
-    let statusCode =
-      firebaseErrors[err.code as keyof typeof firebaseErrors].statusCode || 500;
-    error = new ErrorResponse(statusCode, message);
+    let fbError = firebaseErrors[err.code as keyof typeof firebaseErrors]
+    error = new ErrorResponse(fbError.statusCode || 500, fbError.errorCode || 500, fbError.message || 'Something went wrong');
   } else if (err instanceof PrismaClientValidationError) {
     let message = "Invalid inputs";
     let statusCode = 415;
-    error = new ErrorResponse(statusCode, message);
+    let errorCode = 20;
+    error = new ErrorResponse(statusCode, errorCode, message);
   } else {
     error = err;
   }
+
   // Send the error to client
   res.status(error.statusCode || 500).json({
-    success: false,
+    errorCode: error.errorCode || 500,
     message: error.message || "Something went wrong",
   });
 };

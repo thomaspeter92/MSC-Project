@@ -1,8 +1,10 @@
 class ErrorResponse extends Error {
-  statusCode: number;
-  constructor(statusCode: number, message: string) {
+  statusCode: number; //for the http status.
+  errorCode: number; // for front end error mapping.
+  constructor(statusCode: number, errorCode: number, message: string) {
     super(message)
     this.statusCode = statusCode
+    this.errorCode = errorCode
   }
 }
 
