@@ -23,7 +23,10 @@ RUN npm install
 # Bundle app source inside the Docker image
 COPY . .
 
+# # Run Prisma migrations
+# RUN 
+
 # Expose the port the app runs on
 EXPOSE 8080
 
-CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "./src/app.ts"]
+CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "./src/app.ts", "prisma migrate dev"]

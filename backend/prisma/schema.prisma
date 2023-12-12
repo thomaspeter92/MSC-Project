@@ -3,12 +3,11 @@
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = "postgres://postgres:postgres@db:5432/project"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -19,7 +18,7 @@ model User {
   username   String   @unique
   created_at DateTime @default(now())
   age        Int
-  verified   Boolean
+  verified   Boolean @default(false)
   sex        Sex
 }
 
