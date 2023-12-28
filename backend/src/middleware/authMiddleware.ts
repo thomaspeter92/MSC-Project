@@ -15,6 +15,6 @@ export const verifyToken = async (
     req.params.uid = fbUser.uid;
     next();
   } catch (error) {
-    next(new ErrorResponse(401, "User unauthorized"));
+    next(new ErrorResponse(401, 1, "User unauthorized"));
   }
 };
