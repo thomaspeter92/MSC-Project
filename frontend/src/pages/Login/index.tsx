@@ -2,48 +2,54 @@ import GoogleButton from "../../components/googleButton";
 import TextInput from "../../components/textInput";
 import { useUserStore } from "../../stores/userStore";
 import Button from "../../components/button";
+import { useFormik } from "formik";
+import { signInValidator } from "../../lib/validations/userValidation";
 
 type Props = {};
 
 const Login = ({}: Props) => {
-  const [signIn] = useUserStore((state) => [state.signIn]);
+  const [signIn, loginFailed] = useUserStore((state) => [
+    state.signIn,
+    state.loginFailed,
+  ]);
 
-  // const signIn = async () => {
-  //   let res = await signInWithEmailAndPassword(
-  //     auth,
-  //     "tomas@test.com",
-  //     "password123"
-  //   );
-  //   console.log(res);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: signInValidator,
+    onSubmit: ({ email, password }) => signIn(email, password),
+  });
 
-  //   let token = await res.user.getIdToken();
-
-  //   let r = await fetch("http://127.0.0.1:8080/api/v1/user/signin", {
-  //     method: "POST",
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //     },
-  //   });
-  //   let data = await r.json();
-  //   setLoggedIn(true)
-  // };
   return (
     <div className="h-full flex items-center justify-center">
-      <form className="bg-white p-5 rounded-lg w-[450px] max-w-full space-y-5 shadow-main">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="bg-white p-5 rounded-lg w-[450px] max-w-full space-y-5 shadow-main"
+      >
         <h1>Sign In</h1>
         <GoogleButton />
         <hr />
         <TextInput
+          icon="mail"
           placeholder="Email Address"
           type="email"
-          onChange={() => null}
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.errors.email}
         />
         <TextInput
+          icon="lock"
+          name="password"
           placeholder="Password"
           type="password"
-          onChange={() => null}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.errors.password}
         />
-        <Button>Sign In</Button>
+        <Button type="submit">Sign In</Button>
         <hr />
         <p className="text-center">
           Don't have an account yet?{" "}

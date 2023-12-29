@@ -2,7 +2,6 @@ import { UserCredential, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyBQffvOFjHcu7KLv-QIEt7ucRaLt6mGoS0",
   authDomain: "msc-project-7e88b.firebaseapp.com",
@@ -15,11 +14,18 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-export const signIn = async (email: string, password: string): Promise<UserCredential> => {
-  return signInWithEmailAndPassword(auth, email, password)
-}
+export const signIn = async (
+  email: string,
+  password: string
+): Promise<UserCredential> => {
+  return signInWithEmailAndPassword(auth, email, password);
+};
 
 export const getUserToken = async (): Promise<string | undefined> => {
-  const user = auth.currentUser
-  return await user?.getIdToken()
-}
+  const user = auth.currentUser;
+  return await user?.getIdToken();
+};
+
+export const signOutFirebase = async () => {
+  return await auth.signOut();
+};

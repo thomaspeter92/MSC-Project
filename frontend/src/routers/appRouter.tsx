@@ -1,14 +1,18 @@
-import {Route, Routes} from 'react-router-dom'
-import Dashboard from "../pages/Dashboard"
+import { Route, Routes } from "react-router-dom";
+import Dashboard from "../pages/Dashboard";
+import DashboardLayout from "../components/layout/dashboardLayout";
 
-type Props = {}
+type Props = {};
 
 const AppRouter = ({}: Props) => {
+  console.log("hi");
   return (
-    <Routes>
-      <Route element={<Dashboard />} path="/" />
-    </Routes>
-  )
-}
+    <DashboardLayout>
+      <Routes>
+        <Route element={<Dashboard />} path="/" />
+      </Routes>
+    </DashboardLayout>
+  );
+};
 
-export default AppRouter
+export default AppRouter;

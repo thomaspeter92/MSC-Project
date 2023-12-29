@@ -2,18 +2,16 @@ import "./App.css";
 import AuthRouter from "./routers/authRouter";
 import { useState } from "react";
 import AppRouter from "./routers/appRouter";
-
+import { useUserStore } from "./stores/userStore";
 
 function App() {
   // This should be a global state (zustand)
-  const [loggedIn, setLoggedIn] = useState<boolean>()
-
-  if(loggedIn) {
-    <AppRouter />
+  const [loggedIn] = useUserStore((state) => [state.loggedIn]);
+  console.log(loggedIn);
+  if (loggedIn) {
+    return <AppRouter />;
   } else {
-    return (
-      <AuthRouter />
-    )
+    return <AuthRouter />;
   }
 }
 
