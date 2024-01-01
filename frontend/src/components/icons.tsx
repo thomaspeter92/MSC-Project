@@ -10,6 +10,7 @@ import {
   Heart,
   LogOut,
   Bell,
+  BadgeCheck
 } from "lucide-react";
 
 export const Icons = {
@@ -24,4 +25,5 @@ export const Icons = {
   heart: Heart,
   signOut: LogOut,
   bell: Bell,
+  verify: BadgeCheck
 };
