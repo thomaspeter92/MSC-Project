@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -11,15 +11,16 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   first_name String
   last_name  String
-  email      String   @unique
-  username   String   @unique
-  created_at DateTime @default(now())
+  email      String    @unique
+  username   String    @unique
+  created_at DateTime  @default(now())
   age        Int
-  verified   Boolean @default(false)
+  verified   Boolean   @default(false)
   sex        Sex
+  Profile    Profile[]
 }
 
 enum Sex {
@@ -29,4 +30,35 @@ enum Sex {
   tm
   tf
   nb
+}
+
+model Profile {
+  id          Int     @id @default(autoincrement())
+  user_id     Int
+  user        User    @relation(fields: [user_id], references: [id]) // This establishes the relation
+  smokes      String
+  status      String
+  orientation String
+  body_type   String
+  diet        String
+  drinks      String
+  drugs       String
+  education   String
+  height      String
+  job         String
+  location    String
+  offspring   String
+  pets        String
+  religion    String
+  speaks      String
+  essay0      String?
+  essay1      String?
+  essay2      String?
+  essay3      String?
+  essay4      String?
+  essay5      String?
+  essay6      String?
+  essay7      String?
+  essay8      String?
+  essay9      String?
 }
