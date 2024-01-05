@@ -8,3 +8,7 @@ export const signIn = () => {
 export const getAllUsers = () => {
   return api.get('/user/all')
 }
+
+export const getUser = (id: string) => {
+  return api.get('user/'+id)
+}

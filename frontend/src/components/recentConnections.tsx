@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { getAllUsers } from "../services/userService"
+import { getAllUsers, getUser } from "../services/userService"
 import { Icons } from "./icons"
+import api from "../services/api"
 
 type Props = {}
 
@@ -10,6 +11,15 @@ const RecentConnections = ({}: Props) => {
     queryFn: getAllUsers
   })
 
+ const getuser = async (id: string) => {
+  try {
+    let res = await getUser(id)
+    console.log(res)
+  } catch (error) {
+    console.log(error)
+  }
+ }
+
   const UserIcon = Icons['user']
   if(!isPending && !error) {
   return (
@@ -18,7 +28,7 @@ const RecentConnections = ({}: Props) => {
       <div className="flex flex-wrap items-center gap-5">
       {data.data?.length > 0 ?
       data?.data?.map((d:any) => (
-        <div key={d.id} className="flex flex-col items-center">
+        <div onClick={() => getuser(d.id)} key={d.id} className="flex flex-col items-center">
           <UserIcon className="bg-gray-100 p-2 rounded-full text-rose-200" size={40} />
           <p className="text-gray-500 text-sm">
             {d.first_name}

@@ -11,8 +11,7 @@ const AppRouter = ({}: Props) => {
     <DashboardLayout>
       <Routes>
         <Route element={<Dashboard />} path="/" />
-        <Route element={<Profile />} path="/profile" />
-
+        <Route element={<Profile />} path="/profile/:id" />
       </Routes>
     </DashboardLayout>
   );
