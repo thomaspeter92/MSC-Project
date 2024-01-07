@@ -1,57 +1,58 @@
 import { create } from "zustand";
 import {
-  getUserToken,
   signIn,
   signOutFirebase,
 } from "../services/firebaseService";
-import { signIn as userSignIn } from "../services/userService";
+import { getUser, signIn as userSignIn } from "../services/userService";
+import { onAuthStateChanged } from "../services/firebaseService";
 
 type UserStore = {
   signIn: (email: string, password: string) => void;
   loggedIn: boolean;
   loginFailed: boolean;
+  loading: boolean;
   user: any;
+  signOut: () => void;
 };
 
-// const signIn = async () => {
-//   let res = await signInWithEmailAndPassword(
-//     auth,
-//     "tomas@test.com",
-//     "password123"
-//   );
-//   console.log(res);
+onAuthStateChanged(async (user: any) => {
+  if (user) {
+    try {
+      let res: any = await getUser(user.email as string)
+      if(res.data) {
+        useUserStore.setState({user: res.data, loggedIn: true, loading: false})
+      } else {
+        useUserStore.setState({user: null, loggedIn: false, loading: false})
+      }
+    } catch (error) {
+      useUserStore.setState({user: null, loggedIn: false, loading: false})
+    } 
+  } else {
+    useUserStore.setState({user: null, loggedIn: false, loading: false})
+  }
+})
 
-//   let token = await res.user.getIdToken();
-
-//   let r = await fetch("http://127.0.0.1:8080/api/v1/user/signin", {
-//     method: "POST",
-//     headers: {
-//       Authorization: "Bearer " + token,
-//     },
-//   });
-//   let data = await r.json();
-//   setLoggedIn(true)
-// };
-
-export const useUserStore = create<UserStore>()((set, get) => ({
-  loggedIn: true,
+export const useUserStore = create<UserStore>()((set) => ({
+  loggedIn: false,
+  loading: true,
   loginFailed: false,
-  user: {},
+  user: null,
 
   signIn: async (email: string, password: string) => {
+    set({loading: true})
     try {
       await signIn(email, password);
       let res = await userSignIn();
-      set({ user: res.data.data });
-      set({ loggedIn: true, loginFailed: false });
+      set({ user: res.data });
+      set({ loggedIn: true, loginFailed: false, loading: false });
     } catch (error) {
-      set({ loggedIn: false, loginFailed: true });
+      set({ loggedIn: false, loginFailed: true, loading: false });
     }
   },
   signOut: async () => {
     try {
       await signOutFirebase();
-      set({ user: {}, loggedIn: false });
+      set({ user: null, loggedIn: false });
     } catch (error) {
       alert(error);
     }

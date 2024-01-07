@@ -4,10 +4,11 @@ import { cn } from "../lib/utils";
 import { Icons } from "./icons";
 
 
-const buttonStyles = cva('font-medium capitalize w-40 block m-auto rounded-lg flex items-center justify-center gap-2',{
+const buttonStyles = cva('font-medium capitalize block m-auto rounded-lg flex items-center justify-center gap-2',{
   variants: {
     intent: {
-      primary: "bg-rose-500 text-white"
+      primary: "bg-rose-500 text-white",
+      text: "text-rose-400"
     },
     size: {
       sm: 'px-3 py-1 text-sm',

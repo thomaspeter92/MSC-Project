@@ -1,13 +1,15 @@
 import getAllUsers from "./getAllUsers";
-import getUserById from "./getUser";
+import getUserProfileById from "./getUserProfile";
 import handleSignIn from "./handleSignIn";
 import handleSignUp from "./handleSignUp";
+import getUser from './getUser'
 
 const userController = {
   getAllUsers,
-  getUserById,
+  getUserProfileById,
   handleSignIn,
-  handleSignUp
+  handleSignUp,
+  getUser
 }
 
 export default userController

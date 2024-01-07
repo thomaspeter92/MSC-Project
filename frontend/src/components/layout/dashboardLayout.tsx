@@ -7,6 +7,7 @@ import Button from "../button";
 import TextInput from "../textInput";
 import RecentChats from "../recentChats";
 import RecentConnections from "../recentConnections";
+import { useUserStore } from "../../stores/userStore";
 
 type Props = {
   children: React.ReactNode;
@@ -42,6 +43,7 @@ const MENU: Menu = [
 ];
 
 const DashboardLayout = ({ children }: Props) => {
+  const [signOut] = useUserStore((state) => [state.signOut])
   const SignOutIcon = Icons["signOut"];
   const location = useLocation();
   return (
@@ -80,7 +82,7 @@ const DashboardLayout = ({ children }: Props) => {
               );
             })}
           </ul>
-          <button className="mt-auto text-gray-500 flex items-center gap-2 font-medium">
+          <button onClick={signOut} className="mt-auto text-gray-500 flex items-center gap-2 font-medium">
             <SignOutIcon />
             Sign Out
           </button>

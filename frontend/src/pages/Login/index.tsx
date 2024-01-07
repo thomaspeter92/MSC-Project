@@ -14,6 +14,8 @@ const Login = ({}: Props) => {
   ]);
 
   const formik = useFormik({
+    validateOnBlur: false,
+    validateOnChange: false,
     initialValues: {
       email: "",
       password: "",

@@ -9,7 +9,7 @@ const AuthRouter = ({}: Props) => {
     <Routes>
       <Route element={<Login />} path="/" />
       <Route element={<SignUp />} path="/signup" />
-      <Route element={<NotFound />} path="*" />
+      <Route element={<Login />} path="*" />
     </Routes>
   )
 }

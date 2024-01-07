@@ -3,10 +3,12 @@ import userController from "../controllers/user";
 
 export const userRouter: Router = Router();
 
-userRouter.get("/all", (req,res,next) => userController.getAllUsers(req,res,next));
+userRouter.get("/all", userController.getAllUsers);
 
-// get user
-userRouter.get('/:id', userController.getUserById)
+userRouter.get('/:email', userController.getUser)
+
+// get user profile
+userRouter.get('/profile/:id', userController.getUserProfileById)
 
 // create user
 userRouter.post('/signup', userController.handleSignUp)

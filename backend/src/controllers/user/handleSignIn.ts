@@ -21,7 +21,6 @@ const handleSignIn = async (
         email:user.email
       }
     })    
-    console.log(dbUser)
 
     if(!dbUser) return next(new ErrorResponse(401, 11, 'User not found in DB'))
 

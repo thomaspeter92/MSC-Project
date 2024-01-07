@@ -36,21 +36,21 @@ model Profile {
   id          Int     @id @default(autoincrement())
   user_id     Int     @unique
   user        User    @relation(fields: [user_id], references: [id]) // This establishes the relation
-  smokes      String
-  status      String
-  orientation String
-  body_type   String
-  diet        String
-  drinks      String
-  drugs       String
-  education   String
-  height      String
-  job         String
-  location    String
-  offspring   String
-  pets        String
-  religion    String
-  speaks      String
+  smokes      String?
+  status      String?
+  orientation String?
+  body_type   String?
+  diet        String?
+  drinks      String?
+  drugs       String?
+  education   String?
+  height      String?
+  job         String?
+  location    String?
+  offspring   String?
+  pets        String?
+  religion    String?
+  speaks      String?
   essay0      String?
   essay1      String?
   essay2      String?

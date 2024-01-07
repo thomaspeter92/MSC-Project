@@ -10,7 +10,8 @@ import {
   Heart,
   LogOut,
   Bell,
-  BadgeCheck
+  BadgeCheck,
+  MapPin
 } from "lucide-react";
 
 export const Icons = {
@@ -25,5 +26,6 @@ export const Icons = {
   heart: Heart,
   signOut: LogOut,
   bell: Bell,
-  verify: BadgeCheck
+  verify: BadgeCheck,
+  location: MapPin
 };

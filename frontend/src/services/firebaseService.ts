@@ -1,6 +1,7 @@
 import { UserCredential, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { onAuthStateChanged as fbOnAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQffvOFjHcu7KLv-QIEt7ucRaLt6mGoS0",
@@ -29,3 +30,12 @@ export const getUserToken = async (): Promise<string | undefined> => {
 export const signOutFirebase = async () => {
   return await auth.signOut();
 };
+
+export const getCurrentUser = async () => {
+  const user = auth.currentUser
+  return user;
+}
+
+export const onAuthStateChanged = async (callback: any) => {
+  return fbOnAuthStateChanged(auth, callback)
+}
