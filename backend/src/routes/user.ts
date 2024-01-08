@@ -17,7 +17,4 @@ userRouter.post('/signup', userController.handleSignUp)
 userRouter.post('/signin',userController.handleSignIn)
 
 // edit user
-
-// delete user
-
-// 
+userRouter.post('/updateUser',userController.updateUserProfile)

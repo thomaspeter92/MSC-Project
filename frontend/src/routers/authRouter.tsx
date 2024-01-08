@@ -1,7 +1,6 @@
 import {Routes, Route} from 'react-router-dom'
 import Login from "../pages/Login"
 import SignUp from "../pages/Signup"
-import NotFound from "../pages/NotFound"
 type Props = {}
 
 const AuthRouter = ({}: Props) => {

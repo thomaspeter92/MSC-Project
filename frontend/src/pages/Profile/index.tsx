@@ -112,7 +112,7 @@ const Profile = ({}: Props) => {
       </div>
       <hr className="my-5" />
       <h5>
-        About Me
+        Gallery
       </h5>
       <div>
 

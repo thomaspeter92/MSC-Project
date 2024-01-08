@@ -15,6 +15,8 @@ const handleSignIn = async (
     const token = getBearerToken(req.headers.authorization || "");
     const user = await firebaseService.verifyToken(token ? token : "");
 
+    console.log(user.uid)
+
     // Decoded firebase token will hold user email, use this to find them from the db.
     const dbUser  = await prisma.user.findUnique({
       where: {
