@@ -27,7 +27,7 @@ const RecentConnections = ({}: Props) => {
       <div className="flex flex-wrap items-center gap-5">
       {data.data?.length > 0 ?
       data?.data?.map((d:any) => (
-        <div onClick={() => getUser(d.id)} key={d.id} className="flex flex-col items-center w-16">
+        <div onClick={() => getUser(d.id)} key={d.id} className="flex flex-col items-center w-20">
           <UserIcon className="bg-gray-100 p-2 rounded-full text-rose-200" size={40} />
           <p className="text-gray-500 text-sm">
             {d.first_name}

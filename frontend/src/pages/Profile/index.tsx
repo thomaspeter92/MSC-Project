@@ -22,11 +22,16 @@ const Profile = ({}: Props) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    // 1 - upload image through supbase client
+    // 2 - get the id of the image
+    // 3 - save the image link to the db
     console.log(image)
     if (!image) return;
 
     const formData = new FormData();
     formData.append('image', image);
+    formData.append('id', user.id)
 
     const response = await updateProfile(formData);
     console.log(response)
@@ -37,7 +42,7 @@ const Profile = ({}: Props) => {
     <section className="space-y-5">
 
     <div className="bg-white rounded-xl flex">
-      <img src={IMAGES.photos.sebastian1} alt="" />
+      <img src={data.data.picture} alt="" />
       <div className="p-5 space-y-2">
         <h4>{data.data.first_name}, {data.data.age}</h4>
         <div className="flex gap-2 items-center text-gray-400 ">

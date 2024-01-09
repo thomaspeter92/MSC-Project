@@ -21,6 +21,7 @@ model User {
   verified   Boolean   @default(false)
   sex        Sex
   Profile    Profile[]
+  picture    String?
 }
 
 enum Sex {

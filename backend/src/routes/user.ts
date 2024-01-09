@@ -1,5 +1,8 @@
 import { Router } from "express";
 import userController from "../controllers/user";
+import multer from 'multer'
+
+const upload = multer()
 
 export const userRouter: Router = Router();
 
@@ -17,4 +20,4 @@ userRouter.post('/signup', userController.handleSignUp)
 userRouter.post('/signin',userController.handleSignIn)
 
 // edit user
-userRouter.post('/updateUser',userController.updateUserProfile)
+userRouter.post('/updateUser', upload.single('image'), userController.updateUserProfile)
