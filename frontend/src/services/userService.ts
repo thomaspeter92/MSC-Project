@@ -15,3 +15,7 @@ export const getUserProfile = (id: string) => {
 export const getUser = async (email: string) => {
   return api.get('/user/'+email)
 }
+
+export const updateProfile = async (body: any) => {
+  return api.post('/user/updateUser', body)
+}

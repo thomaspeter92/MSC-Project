@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import IMAGES from "../../assets/images/images"
-import { getUserProfile } from "../../services/userService"
+import { getUserProfile, updateProfile } from "../../services/userService"
 import { useUserStore } from "../../stores/userStore"
 import { Icons } from "../../components/icons"
 import Button from "../../components/button"
+import { useState } from "react"
 
 type Props = {}
 
@@ -13,9 +14,23 @@ const Profile = ({}: Props) => {
     queryKey: ['profile'],
     queryFn: () => getUserProfile(user.id)
   })
+  const [image, setImage] = useState(null);
+
 
   const LocationIcon = Icons['location']
 
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    console.log(image)
+    if (!image) return;
+
+    const formData = new FormData();
+    formData.append('image', image);
+
+    const response = await updateProfile(formData);
+    console.log(response)
+};
 
   if(data && !isPending){
     return (
@@ -114,6 +129,12 @@ const Profile = ({}: Props) => {
       <h5>
         Gallery
       </h5>
+
+
+      <form onSubmit={handleSubmit}>
+        <input type="file" accept="image/"  onChange={(e) => setImage(e.target.files[0])}/>
+        <button type="submit">submit</button>
+      </form>
       <div>
 
       </div>
