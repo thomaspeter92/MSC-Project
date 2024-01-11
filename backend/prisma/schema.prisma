@@ -34,10 +34,11 @@ enum Sex {
 }
 
 model Profile {
-  id          Int     @id @default(autoincrement())
-  user_id     Int     @unique
-  user        User    @relation(fields: [user_id], references: [id]) // This establishes the relation
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @unique
+  user        User     @relation(fields: [user_id], references: [id]) // This establishes the relation
   smokes      String?
+  bio         String?
   status      String?
   orientation String?
   body_type   String?
@@ -51,6 +52,8 @@ model Profile {
   offspring   String?
   pets        String?
   religion    String?
+  likes       String[] @default([])
+  dislikes    String[] @default([])
   speaks      String?
   essay0      String?
   essay1      String?

@@ -8,7 +8,7 @@ const getAllUsers = async (
   next: NextFunction
 ) => {
   const users = await prisma.user.findMany({
-    skip: 1,
+    // skip: 1,
     take: 10
   });
 

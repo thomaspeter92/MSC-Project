@@ -24,7 +24,7 @@ const RecentConnections = ({}: Props) => {
   return (
     <div className="p-5 rounded-xl bg-white">
       <h6 className="mb-3">Recent Connections</h6>
-      <div className="flex flex-wrap items-center gap-5">
+      <div className="grid grid-cols-4 gap-5">
       {data.data?.length > 0 ?
       data?.data?.map((d:any) => (
         <div onClick={() => getUser(d.id)} key={d.id} className="flex flex-col items-center w-20">

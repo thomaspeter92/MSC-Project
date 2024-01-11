@@ -4,7 +4,7 @@ import { cn } from "../lib/utils";
 import { Icons } from "./icons";
 
 
-const buttonStyles = cva('font-medium capitalize block m-auto rounded-lg flex items-center justify-center gap-2',{
+const buttonStyles = cva('font-medium capitalize block rounded-lg flex items-center justify-center gap-2',{
   variants: {
     intent: {
       primary: "bg-rose-500 text-white",
@@ -31,14 +31,16 @@ type Props = {
   children: React.ReactNode;
   type?: "submit" | "reset" | "button" | undefined;
   icon?: keyof typeof Icons
+  onClick?: () => void
 };
 
-const Button = ({ children, type, intent, size, rounded, icon }: Props & VariantProps<typeof buttonStyles>) => {
+const Button = ({ children, type, intent, size, rounded, icon, onClick }: Props & VariantProps<typeof buttonStyles>) => {
   
   const Icon = Icons[icon as keyof typeof Icons]
   
   return (
     <button
+      onClick={onClick}
       type={type}
       className={cn(buttonStyles({intent, size, rounded}))}
     >

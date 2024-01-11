@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="h-screen bg-neutral-100 p-5 md:p-10">
+        <div className="min-h-screen bg-neutral-100 p-5 md:p-10">
           <App />
         </div>
       </BrowserRouter>

@@ -47,7 +47,7 @@ const DashboardLayout = ({ children }: Props) => {
   const SignOutIcon = Icons["signOut"];
   const location = useLocation();
   return (
-    <main className="h-full container m-auto flex flex-col">
+    <main className="px-5 m-auto flex flex-col">
       {/* TOP BAR */}
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
         <h4>
@@ -60,9 +60,9 @@ const DashboardLayout = ({ children }: Props) => {
         </div>
       </nav>
       {/* MAIN AREA */}
-      <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-5 mt-10 h-full">
+      <div className="grid md:grid-cols-4 lg:grid-cols-7 gap-5 mt-10 h-full">
         {/* SIDEBAR */}
-        <aside className="bg-white whitespace-nowrap p-5 px-5 rounded-xl shadow-main h-full flex flex-col justify-between items-start">
+        <aside className="bg-white shrink-0 whitespace-nowrap p-5 px-5 rounded-xl shadow-main h-full flex flex-col justify-between items-start">
           <ul className="space-y-1 w-full">
             {MENU.map((d) => {
               const Icon = Icons[d.icon];
@@ -88,7 +88,7 @@ const DashboardLayout = ({ children }: Props) => {
           </button>
         </aside>
         {/* CENTER COLUMN */}
-        <section className="col-span-2 lg:col-span-3">{children}</section>
+        <section className="col-span-2 lg:col-span-4">{children}</section>
         {/* RIGHT COLUMN */}
         <section className="space-y-5 lg:col-span-2">
           <RecentChats />

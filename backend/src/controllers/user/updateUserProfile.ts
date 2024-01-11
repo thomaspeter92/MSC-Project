@@ -26,17 +26,20 @@ const updateUserProfile = async (
     const profilePicture = req.file?.buffer
     console.log(req.body)
 
+    if(profilePicture) {
+      const { error } = await supabase
+        .storage
+        .from('gallery')
+        .upload(`${user.uid}/profile.png`, profilePicture, {
+          cacheControl: '3600',
+          upsert: false
+        })
+      if(error){
+        return next(new ErrorResponse(500, 12, "unable to upload image"))
+      }
 
-    const { data, error } = await supabase
-      .storage
-      .from('gallery')
-      .upload(`${user.uid}/profile.png`, profilePicture, {
-        cacheControl: '3600',
-        upsert: false
-      })
-    if(error){
-      return next(new ErrorResponse(500, 12, "unable to upload image"))
     }
+
     await prisma.user.update({
       data: {
         picture: 'https://fxxqwotagugztamftphi.supabase.co/storage/v1/object/public/gallery/'+user.uid+'/profile.png'
