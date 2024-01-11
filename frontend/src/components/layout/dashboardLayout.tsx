@@ -43,17 +43,22 @@ const MENU: Menu = [
 ];
 
 const DashboardLayout = ({ children }: Props) => {
-  const [signOut] = useUserStore((state) => [state.signOut])
+  const [signOut] = useUserStore((state) => [state.signOut]);
   const SignOutIcon = Icons["signOut"];
   const location = useLocation();
   return (
     <main className="px-5 m-auto flex flex-col">
       {/* TOP BAR */}
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
-        <h4>
-          Logo
-        </h4>
-        <TextInput placeholder="Search" type="text" onChange={() => null} error={''} value="" name="name" />
+        <h4>Logo</h4>
+        <TextInput
+          placeholder="Search"
+          type="text"
+          onChange={() => null}
+          error={""}
+          value=""
+          name="name"
+        />
         <div className="flex items-center gap-5">
           <Button icon="verify">Get Verified</Button>
           <Notification />
@@ -76,13 +81,16 @@ const DashboardLayout = ({ children }: Props) => {
                   )}
                   key={d.href}
                 >
-                  <Icon size={20} />
+                  <Icon size={20} className="shrink-0" />
                   <Link to={d.href}>{d.title}</Link>
                 </li>
               );
             })}
           </ul>
-          <button onClick={signOut} className="mt-auto text-gray-500 flex items-center gap-2 font-medium">
+          <button
+            onClick={signOut}
+            className="mt-auto text-gray-500 flex items-center gap-2 font-medium"
+          >
             <SignOutIcon />
             Sign Out
           </button>
