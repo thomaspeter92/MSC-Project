@@ -39,7 +39,6 @@ model Profile {
   user        User     @relation(fields: [user_id], references: [id]) // This establishes the relation
   smokes      String?
   bio         String?
-  status      String?
   orientation String?
   body_type   String?
   diet        String?

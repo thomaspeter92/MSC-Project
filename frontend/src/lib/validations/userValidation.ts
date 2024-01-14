@@ -7,13 +7,16 @@ export const usernameValidation = yup
   .max(20, "usernameLength") /* 사용자 아이디는 5-20 글자가 필요합니다. */
   .matches(
     /^[a-z0-9]+$/,
-    "usernameFormat"
+    "usernameFormat",
   ); /* 사용자명에는 글자와 숫자만 사용가능합니다. */
 
 export const emailValidation = yup
   .string()
   .email()
-  .matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "Email invalid")
+  .matches(
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    "Email invalid",
+  )
   .required("Email is required.");
 
 const passwordValidation = yup

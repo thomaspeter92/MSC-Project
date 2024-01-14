@@ -17,7 +17,7 @@ export const auth = getAuth(app);
 
 export const signIn = async (
   email: string,
-  password: string
+  password: string,
 ): Promise<UserCredential> => {
   return signInWithEmailAndPassword(auth, email, password);
 };
@@ -32,10 +32,10 @@ export const signOutFirebase = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const user = auth.currentUser
+  const user = auth.currentUser;
   return user;
-}
+};
 
 export const onAuthStateChanged = async (callback: any) => {
-  return fbOnAuthStateChanged(auth, callback)
-}
+  return fbOnAuthStateChanged(auth, callback);
+};

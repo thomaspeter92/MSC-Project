@@ -25,7 +25,7 @@ const Login = ({}: Props) => {
   });
 
   return (
-    <div className="h-full flex items-center justify-center">
+    <div className="h-screen flex items-center justify-center">
       <form
         onSubmit={formik.handleSubmit}
         className="bg-white p-5 rounded-lg w-[450px] max-w-full space-y-5 shadow-main"

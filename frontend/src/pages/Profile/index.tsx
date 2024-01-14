@@ -12,8 +12,9 @@ const Profile = ({}: Props) => {
     queryKey: ["profile"],
     queryFn: () => getUserProfile(user.id),
   });
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<any>(null);
   const [showAdditional, setShowAdditional] = useState<boolean>(false);
+  const RightIcon = Icons['right']
 
   const LocationIcon = Icons["location"];
 
@@ -134,17 +135,17 @@ const Profile = ({}: Props) => {
             <input
               type="file"
               accept="image/"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e: any) => setImage(e?.target?.files[0])}
             />
             <button type="submit">submit</button>
           </form>
           <div></div>
           <hr className="my-5" />
           <button
-            className="font-bold text-rose-500 mb-5"
+            className="font-bold text-rose-500 mb-5 flex items-center"
             onClick={() => setShowAdditional(true)}
           >
-            See more about {data.data.first_name}
+            See {showAdditional ? 'less' : 'more'} about {data.data.first_name} <RightIcon size={20} />
           </button>
           {showAdditional ? (
             <div className="space-y-5 ">

@@ -28,26 +28,27 @@ axiosInstance.interceptors.request.use(async (req) => {
 });
 
 const handleApiResponse = (res: any) => {
-  console.log(res)
-  if(res.data) {
-    return res.data
-  } else { 
-    throw new Error('failed')
+  console.log(res);
+  if (res.data) {
+    return res.data;
+  } else {
+    throw new Error("failed");
   }
-}
+};
 
 const api = (axios: AxiosInstance) => {
   return {
     get: async <T>(url: string, config: AxiosRequestConfig = {}) => {
-
       const res = await axios.get<ApiResponse<T>>(url, config);
       return handleApiResponse(res);
-
     },
-    post: async <T>(url: string, body: any, config: AxiosRequestConfig = {}) => {
+    post: async <T>(
+      url: string,
+      body: any,
+      config: AxiosRequestConfig = {},
+    ) => {
       const res = await axios.post<ApiResponse<T>>(url, body, config);
       return handleApiResponse(res);
-
     },
   };
 };

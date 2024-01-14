@@ -47,7 +47,7 @@ const DashboardLayout = ({ children }: Props) => {
   const SignOutIcon = Icons["signOut"];
   const location = useLocation();
   return (
-    <main className="px-5 m-auto flex flex-col">
+    <div className="flex flex-col m-auto p-5 h-screen">
       {/* TOP BAR */}
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
         <h4>Logo</h4>
@@ -65,45 +65,47 @@ const DashboardLayout = ({ children }: Props) => {
         </div>
       </nav>
       {/* MAIN AREA */}
-      <div className="grid md:grid-cols-4 lg:grid-cols-7 gap-5 mt-10 h-full">
-        {/* SIDEBAR */}
-        <aside className="bg-white shrink-0 whitespace-nowrap p-5 px-5 rounded-xl shadow-main h-full flex flex-col justify-between items-start">
-          <ul className="space-y-1 w-full">
-            {MENU.map((d) => {
-              const Icon = Icons[d.icon];
-              return (
-                <li
-                  className={cn(
-                    "flex gap-4 items-center hover:text-rose-500 px-2 py-2 rounded-lg font-medium overflow-auto",
-                    location.pathname === d.href
-                      ? "bg-rose-100 text-rose-500"
-                      : ""
-                  )}
-                  key={d.href}
-                >
-                  <Icon size={20} className="shrink-0" />
-                  <Link to={d.href}>{d.title}</Link>
-                </li>
-              );
-            })}
-          </ul>
-          <button
-            onClick={signOut}
-            className="mt-auto text-gray-500 flex items-center gap-2 font-medium"
-          >
-            <SignOutIcon />
-            Sign Out
-          </button>
-        </aside>
-        {/* CENTER COLUMN */}
-        <section className="col-span-2 lg:col-span-4">{children}</section>
-        {/* RIGHT COLUMN */}
-        <section className="space-y-5 lg:col-span-2">
-          <RecentChats />
-          <RecentConnections />
-        </section>
-      </div>
-    </main>
+      <main className="flex flex-grow overflow-auto gap-5 mt-10">
+          {/* SIDEBAR */}
+          <aside className="w-[250px] sticky top-0 h-full">
+            <div className="h-full bg-white shrink-0 p-5 rounded-xl shadow-main flex flex-col justify-between items-start">
+            <ul className="space-y-1 w-full">
+              {MENU.map((d) => {
+                const Icon = Icons[d.icon]
+                return (
+                  <li
+                    className={cn(
+                      "flex gap-4 items-center hover:text-rose-500 px-2 py-2 rounded-lg font-medium overflow-auto",
+                      location.pathname === d.href
+                        ? "bg-rose-100 text-rose-500"
+                        : "",
+                    )}
+                    key={d.href}
+                  >
+                    <Icon size={20} className="shrink-0" />
+                    <Link to={d.href}>{d.title}</Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <button
+              onClick={signOut}
+              className=" text-gray-500 flex items-center gap-2 font-medium"
+            >
+              <SignOutIcon />
+              Sign Out
+            </button>
+            </div>
+          </aside>
+          {/* CENTER COLUMN */}
+          <section className="flex-1 rounded-lg">{children}</section>
+          {/* RIGHT COLUMN */}
+          <section className="space-y-5 w-[300px] sticky top-0">
+            <RecentChats />
+            <RecentConnections />
+          </section>
+      </main>
+    </div>
   );
 };
 

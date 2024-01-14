@@ -10,7 +10,7 @@ const InputStyles = cva(
         md: "w-full",
       },
     },
-  }
+  },
 );
 
 type Props = {
@@ -53,7 +53,7 @@ const TextInput = ({
           className={cn(
             InputStyles({ size }),
             icon ? "pl-9" : "",
-            error ? "border-red-500 bg-red-100" : ""
+            error ? "border-red-500 bg-red-100" : "",
           )}
           placeholder={placeholder}
         />

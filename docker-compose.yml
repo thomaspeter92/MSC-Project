@@ -7,18 +7,14 @@ services:
       - "8080:8080"
     volumes:
       - ./backend:/usr/src/app
-    # depends_on:
-    #   - db
-#   db:
-#     image: postgres
-#     environment:
-#       POSTGRES_DB: project
-#       POSTGRES_USER: postgres
-#       POSTGRES_PASSWORD: postgres
-#     ports:
-#       - "5432:5432"
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
 
-# volumes:
-#   postgres_data:
+  python-app:
+    build: ./python_service
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=HeliosChenThomasBuckley
+      - DB_HOST=db.fxxqwotagugztamftphi.supabase.co
+      - DB_PORT=5432
+    volumes:
+      - ./python_service:/usr/src/app

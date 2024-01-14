@@ -1,8 +1,5 @@
 import { create } from "zustand";
-import {
-  signIn,
-  signOutFirebase,
-} from "../services/firebaseService";
+import { signIn, signOutFirebase } from "../services/firebaseService";
 import { getUser, signIn as userSignIn } from "../services/userService";
 import { onAuthStateChanged } from "../services/firebaseService";
 
@@ -18,19 +15,23 @@ type UserStore = {
 onAuthStateChanged(async (user: any) => {
   if (user) {
     try {
-      let res: any = await getUser(user.email as string)
-      if(res.data) {
-        useUserStore.setState({user: res.data, loggedIn: true, loading: false})
+      let res: any = await getUser(user.email as string);
+      if (res.data) {
+        useUserStore.setState({
+          user: res.data,
+          loggedIn: true,
+          loading: false,
+        });
       } else {
-        useUserStore.setState({user: null, loggedIn: false, loading: false})
+        useUserStore.setState({ user: null, loggedIn: false, loading: false });
       }
     } catch (error) {
-      useUserStore.setState({user: null, loggedIn: false, loading: false})
-    } 
+      useUserStore.setState({ user: null, loggedIn: false, loading: false });
+    }
   } else {
-    useUserStore.setState({user: null, loggedIn: false, loading: false})
+    useUserStore.setState({ user: null, loggedIn: false, loading: false });
   }
-})
+});
 
 export const useUserStore = create<UserStore>()((set) => ({
   loggedIn: false,
@@ -39,7 +40,7 @@ export const useUserStore = create<UserStore>()((set) => ({
   user: null,
 
   signIn: async (email: string, password: string) => {
-    set({loading: true})
+    set({ loading: true });
     try {
       await signIn(email, password);
       let res = await userSignIn();

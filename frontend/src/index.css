@@ -5,6 +5,7 @@
 @layer base {
   body {
     @apply text-gray-700;
+    @apply bg-neutral-100;
   }
   h1 {
     @apply text-4xl font-bold;
@@ -27,5 +28,5 @@
 }
 
 body {
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
 }

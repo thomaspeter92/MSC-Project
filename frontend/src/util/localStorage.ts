@@ -9,7 +9,7 @@ const parseLocalStorageJSON = (key: string) => {
   }
 
   const item = localStorage.getItem(key);
-  if(item === null) return null
+  if (item === null) return null;
 
   /**
    * Handle non-string value with JSON.parse.
@@ -18,7 +18,7 @@ const parseLocalStorageJSON = (key: string) => {
   try {
     return JSON.parse(item);
   } catch {
-    return item
+    return item;
   }
 };
 

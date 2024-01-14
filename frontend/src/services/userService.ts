@@ -5,17 +5,17 @@ export const signIn = () => {
 };
 
 export const getAllUsers = () => {
-  return api.get('/user/all')
-}
+  return api.get("/user/all");
+};
 
 export const getUserProfile = (id: string) => {
-  return api.get('/user/profile/'+id)
-}
+  return api.get("/user/profile/" + id);
+};
 
 export const getUser = async (email: string) => {
-  return api.get('/user/'+email)
-}
+  return api.get("/user/" + email);
+};
 
 export const updateProfile = async (body: any) => {
-  return api.post('/user/updateUser', body)
-}
+  return api.post("/user/updateUser", body);
+};

@@ -1,7 +1,7 @@
-import {Routes, Route} from 'react-router-dom'
-import Login from "../pages/Login"
-import SignUp from "../pages/Signup"
-type Props = {}
+import { Routes, Route } from "react-router-dom";
+import Login from "../pages/Login";
+import SignUp from "../pages/Signup";
+type Props = {};
 
 const AuthRouter = ({}: Props) => {
   return (
@@ -10,7 +10,7 @@ const AuthRouter = ({}: Props) => {
       <Route element={<SignUp />} path="/signup" />
       <Route element={<Login />} path="*" />
     </Routes>
-  )
-}
+  );
+};
 
-export default AuthRouter
+export default AuthRouter;
