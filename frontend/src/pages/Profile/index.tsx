@@ -84,7 +84,7 @@ const Profile = ({}: Props) => {
 
         <div className="bg-white rounded-xl p-5 mb-5 ">
           <h5>About Me</h5>
-          <div className="flex flex-wrap items-center space-y-1">
+          <div className="flex flex-wrap items-center space-y-1 capitalize">
             {/* GENDER */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Gender</p>
@@ -99,33 +99,33 @@ const Profile = ({}: Props) => {
             </div>
             {/* HOMETOWN */}
             <div className="w-1/2 flex items-center">
-              <p className=" text-gray-500 text-sm w-24">Hometown</p>
-              <p className="font-semibold">{data.data.hometown || "?"}</p>
+              <p className=" text-gray-500 text-sm w-24">Diet</p>
+              <p className="font-semibold">{data.data.diet || "?"}</p>
             </div>
             {/* DRINKS */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Drinks</p>
-              <p className="font-semibold">{data.data.hometown || "?"}</p>
+              <p className="font-semibold">{data.data.drinks || "?"}</p>
             </div>
             {/* LANGUAGES */}
             <div className="w-1/2 flex items-center">
-              <p className=" text-gray-500 text-sm w-24">Languages</p>
-              <p className="font-semibold">{data.data.hometown || "?"}</p>
+              <p className=" text-gray-500 text-sm w-24">Education</p>
+              <p className="font-semibold">{data.data.education || "?"}</p>
             </div>
             {/* PETS */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Pets</p>
-              <p className="font-semibold">{data.data.hometown || "?"}</p>
+              <p className="font-semibold">{data.data.pets || "?"}</p>
             </div>
             {/* EDUCATION */}
             <div className="w-1/2 flex items-center">
-              <p className=" text-gray-500 text-sm w-24">Education</p>
-              <p className="font-semibold">{data.data.hometown || "?"}</p>
+              <p className=" text-gray-500 text-sm w-24">Job</p>
+              <p className="font-semibold">{data.data.job || "?"}</p>
             </div>
             {/* CHILDREN */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Children</p>
-              <p className="font-semibold">{data.data.hometown || "?"}</p>
+              <p className="font-semibold">{data.data.offspring || "?"}</p>
             </div>
           </div>
           <hr className="my-5" />

@@ -47,7 +47,7 @@ const DashboardLayout = ({ children }: Props) => {
   const SignOutIcon = Icons["signOut"];
   const location = useLocation();
   return (
-    <div className="flex flex-col m-auto p-5 h-screen">
+    <div className="flex flex-col m-auto p-5 px-20 h-screen">
       {/* TOP BAR */}
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
         <h4>Logo</h4>
@@ -65,7 +65,7 @@ const DashboardLayout = ({ children }: Props) => {
         </div>
       </nav>
       {/* MAIN AREA */}
-      <main className="flex flex-grow overflow-auto gap-5 mt-10">
+      <main className="flex flex-grow overflow-auto gap-10 mt-10">
           {/* SIDEBAR */}
           <aside className="w-[250px] sticky top-0 h-full">
             <div className="h-full bg-white shrink-0 p-5 rounded-xl shadow-main flex flex-col justify-between items-start">

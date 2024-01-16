@@ -6,6 +6,5 @@ def main():
   recommender.process_essays(profiles)
 
 
-
 if __name__ == '__main__':
   main()

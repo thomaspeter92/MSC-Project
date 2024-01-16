@@ -1,4 +1,4 @@
-import { Request,Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import respond from "../../utils/response";
@@ -8,7 +8,6 @@ const getUserProfileById = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.params.id)
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -18,15 +17,16 @@ const getUserProfileById = async (
     if (!user) return next(new ErrorResponse(404, 11, "No user found"));
     const profile = await prisma.profile.findUnique({
       where: {
-        user_id: Number(req.params.id)
-      }
-    })
+        user_id: Number(req.params.id),
+      },
+    });
     if (!profile) return next(new ErrorResponse(404, 11, "No user found"));
 
-    respond(res, 'Success', {...user, ...profile})
+    respond(res, "Success", { ...user, ...profile });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
 
-export default getUserProfileById
+export default getUserProfileById;
