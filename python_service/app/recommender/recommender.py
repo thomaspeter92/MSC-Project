@@ -5,7 +5,7 @@ import spacy
 # from sentence_transformers import SentenceTransformer
 # import numpy as np
 # from textblob import TextBlob
-
+from db.database import update_likes
 
 
 # Load the spaCy model
@@ -57,6 +57,7 @@ def extract_likes_dislikes(text):
   - i like dogs and i don't like to shave.
   - i hate dogs and i love to shave.
 '''
+
 def process_essays(users):
   df = pd.DataFrame(users)
   # df['essay0'] = df['essay0'].fillna('') #fill empty essays 
@@ -67,6 +68,15 @@ def process_essays(users):
   # Apply the extract_likes_dislikes function to all essays
   df[['likes', 'dislikes']] = df['all_essays'].apply(lambda x: pd.Series(extract_likes_dislikes(x)))
 
+  df.drop('all_essays', axis=1, inplace=True)
+
+  
+
+  # csv_file_path = 'data_with_likes.csv'
+
+  # Export the DataFrame to a CSV file
+  # df.to_csv(csv_file_path, index=False)
+  
 
   # tfidf = TfidfVectorizer(stop_words='english')
   # tfidf_matrix = tfidf.fit_transform(df['all_essays'])
@@ -80,13 +90,7 @@ def process_essays(users):
 
   # Get the top similarity scores using the indices
   # top_scores = profile_similarities[top_indices]
-
-
-  print(df.loc[5]['likes'])
-  print(df.loc[5]['dislikes'])
-  print("\n")
-  print(df.loc[5]['all_essays'])
-
+ 
 
 #
 
