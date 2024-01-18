@@ -5,6 +5,7 @@ import spacy
 # from sentence_transformers import SentenceTransformer
 # import numpy as np
 # from textblob import TextBlob
+<<<<<<< HEAD
 import nltk
 from nltk import FreqDist
 from nltk.tokenize import word_tokenize
@@ -14,6 +15,9 @@ import re
 # Ensure you have the necessary NLTK data
 nltk.download('punkt')
 nltk.download('stopwords')
+=======
+from db.database import update_likes
+>>>>>>> 0f808e50ab0b0219eeb8a16e1eb4ab0070cab9cb
 
 
 # Load the spaCy model
@@ -111,6 +115,7 @@ def extract_likes_dislikes(text):
   - i like dogs and i don't like to shave.
   - i hate dogs and i love to shave.
 '''
+
 def process_essays(users):
     df = pd.DataFrame(users)
     # df['essay0'] = df['essay0'].fillna('') #fill empty essays 
@@ -127,6 +132,15 @@ def process_essays(users):
 
     df.to_csv('gays.csv', index=False)
 
+  df.drop('all_essays', axis=1, inplace=True)
+
+  
+
+  # csv_file_path = 'data_with_likes.csv'
+
+  # Export the DataFrame to a CSV file
+  # df.to_csv(csv_file_path, index=False)
+  
 
     # like_words = ['like', 'love', 'enjoy']
     # dislike_words = ['dislike', 'hate', "don't like"]
