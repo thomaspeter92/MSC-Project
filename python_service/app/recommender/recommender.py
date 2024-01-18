@@ -5,11 +5,54 @@ import spacy
 # from sentence_transformers import SentenceTransformer
 # import numpy as np
 # from textblob import TextBlob
+import nltk
+from nltk import FreqDist
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import re
 
+# Ensure you have the necessary NLTK data
+nltk.download('punkt')
+nltk.download('stopwords')
 
 
 # Load the spaCy model
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_md")
+
+
+def find_common_phrases(texts, target_words, window_size=5):
+    """
+    Find common words or phrases around target words within a specified window size.
+    :param texts: List of texts.
+    :param target_words: List of target words like 'like', 'love', etc.
+    :param window_size: Number of words around the target word to consider.
+    :return: A frequency distribution of words.
+    """
+    stop_words = set(stopwords.words('english'))
+
+    # Preprocess the texts
+    texts = [re.sub(r'\W', ' ', text.lower()) for text in texts]
+
+    # Tokenize the texts
+    tokenized_texts = [word_tokenize(text) for text in texts]
+
+    # Context words around the target words
+    context_words = []
+
+    for tokens in tokenized_texts:
+        for i, word in enumerate(tokens):
+            if word in target_words:
+                # Define the window range
+                start = max(i - window_size, 0)
+                end = min(i + window_size + 1, len(tokens))
+                # Add the context words to the list
+                context_words.extend([w for w in tokens[start:i] + tokens[i+1:end] if w not in stop_words])
+
+    # Frequency distribution of context words
+    freq_dist = FreqDist(context_words)
+    return freq_dist
+
+
 
 def extract_keywords(sentence):
     doc = nlp(sentence)
@@ -33,19 +76,30 @@ def extract_keywords(sentence):
 def extract_likes_dislikes(text):
     likes, dislikes = [], []
     doc = nlp(text)
+    like_keywords = ["like",
+    "Adore", "Appreciate", "Care for", "Choose", "Crave",
+    "Delight in", "Desire", "Enjoy", "Fancy", "Favor",
+    "Feel like", "Go for", "Go in for", "Lean toward", "Lean towards",
+    "Love", "Pick", "Prefer", "Rejoice in", "Relish",
+    "Revel in", "Savor", "Take to", "Want", "Welcome",
+    "Wish for"
+    ]
+    dislike_keywords = [
+    "Dislike", "Hate", "Detest", "Abhor", "Loathe",
+    "Despise", "Resent", "Reject", "Avoid", "Shun",
+    "Disapprove", "Disfavor", "Decline", "Oppose", "Recoil from",
+    "Spurn", "Repudiate", "Disdain", "Scoff at", "Frown on",
+    "Shrink from", "Be averse to", "Have no taste for", "Find distasteful", "Be turned off by",
+    "Not care for", "Not be fond of"
+    ]
 
-    for sent in doc.sents:
-        for token in sent:
-            # Check for 'like', 'love', 'enjoy' for likes
-            if token.lemma_ in ['like', 'love', 'enjoy']:
-                likes += extract_keywords(sent.text)
-                break  # Stop to avoid duplicate sentence capture
-            # Check for 'dislike', 'hate' for dislikes
-            elif token.lemma_ in ['dislike', 'hate']:
-                dislikes += extract_keywords(sent.text)
-                break
+    for ent in doc.ents:  # Iterate through named entities
+        sentence = ent.sent.text.lower()
+        if any(kw in sentence for kw in like_keywords):
+            likes.append(ent.text)
+        elif any(kw in sentence for kw in dislike_keywords):
+            dislikes.append(ent.text)
 
-        # Limit the number of likes and dislikes
         if len(likes) >= 5 and len(dislikes) >= 5:
             break
 
@@ -58,37 +112,44 @@ def extract_likes_dislikes(text):
   - i hate dogs and i love to shave.
 '''
 def process_essays(users):
-  df = pd.DataFrame(users)
-  # df['essay0'] = df['essay0'].fillna('') #fill empty essays 
-  essay_columns = [f'essay{i}' for i in range(10)]  
-  df['all_essays'] = df[essay_columns].apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
+    df = pd.DataFrame(users)
+    # df['essay0'] = df['essay0'].fillna('') #fill empty essays 
+    essay_columns = [f'essay{i}' for i in range(10)]  
+    df['all_essays'] = df[essay_columns].apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
+
+    # now I wanna get the words associated with likes/dislikes from the texts. 
+    texts = df['all_essays'].tolist()
 
 
-  # Apply the extract_likes_dislikes function to all essays
-  df[['likes', 'dislikes']] = df['all_essays'].apply(lambda x: pd.Series(extract_likes_dislikes(x)))
+    df[['likes', 'dislikes']] = df['all_essays'].apply(lambda x: pd.Series(extract_likes_dislikes(x)))
+    print(df['likes'])
+    print(df.loc[5]['all_essays'])
+
+    df.to_csv('gays.csv', index=False)
 
 
-  # tfidf = TfidfVectorizer(stop_words='english')
-  # tfidf_matrix = tfidf.fit_transform(df['all_essays'])
-  # similarity_overview = linear_kernel(tfidf_matrix, tfidf_matrix)
-  # similarity_df = pd.DataFrame(similarity_overview)
-  # profile_similarities = similarity_overview[0] #This index is the index of user we are comparing to. 
-  # top_indices = (-profile_similarities).argsort()[1:11]  # Skip the first one
+    # like_words = ['like', 'love', 'enjoy']
+    # dislike_words = ['dislike', 'hate', "don't like"]
+    # like_phrases = find_common_phrases(texts, like_words)
+    # dislike_phrases = find_common_phrases(texts, dislike_words)
+    # print('COMMON LIKE WORDS:', like_phrases.most_common(20))
+    # print('COMMON DISLIKE WORDS:', dislike_phrases.most_common(20))
 
-  # likes, dislikes = extract_likes_dislikes(df.loc[top_indices[0]]['all_essays'])
-  # print(likes, dislikes)
+    # Apply the extract_likes_dislikes function to all essays
 
-  # Get the top similarity scores using the indices
-  # top_scores = profile_similarities[top_indices]
+# tfidf = TfidfVectorizer(stop_words='english')
+# tfidf_matrix = tfidf.fit_transform(df['all_essays'])
+# similarity_overview = linear_kernel(tfidf_matrix, tfidf_matrix)
+# similarity_df = pd.DataFrame(similarity_overview)
+# profile_similarities = similarity_overview[0] #This index is the index of user we are comparing to. 
+# top_indices = (-profile_similarities).argsort()[1:11]  # Skip the first one
 
+# likes, dislikes = extract_likes_dislikes(df.loc[top_indices[0]]['all_essays'])
+# print(likes, dislikes)
 
-  print(df.loc[5]['likes'])
-  print(df.loc[5]['dislikes'])
-  print("\n")
-  print(df.loc[5]['all_essays'])
+# Get the top similarity scores using the indices
+# top_scores = profile_similarities[top_indices]
 
-
-#
 
 # def get_sentiment(text):
 #   # Returns the polarity score of the text

@@ -12,8 +12,9 @@ import {
   Bell,
   BadgeCheck,
   MapPin,
-  ChevronsRight
-} from "lucide-react";
+  ChevronsRight,
+  UserRoundPlus,
+} from 'lucide-react';
 
 export const Icons = {
   settings: Settings,
@@ -29,5 +30,6 @@ export const Icons = {
   bell: Bell,
   verify: BadgeCheck,
   location: MapPin,
-  right: ChevronsRight
+  right: ChevronsRight,
+  connect: UserRoundPlus,
 };

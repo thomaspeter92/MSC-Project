@@ -3,3 +3,5 @@ psycopg2-binary
 pandas
 # scikit-learn
 spacy
+nltk
+regex
