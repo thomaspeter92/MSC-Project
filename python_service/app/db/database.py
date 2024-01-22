@@ -18,20 +18,10 @@ def get_db_connection():
 def fetch_profiles():
     conn = get_db_connection()
     with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-        cur.execute('SELECT * FROM "Profile" WHERE orientation = \'gay\';')
+        cur.execute('SELECT * FROM "Profile" LIMIT 100;')
         profiles = cur.fetchall()
     conn.close()
+    print(profiles)
     return profiles
 
-def update_likes(likes, dislikes, user_id):
-    conn = get_db_connection()
-    with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-        query = """
-            UPDATE "Profile"
-            SET likes = %s, dislikes = %s
-            WHERE user_id = %s;
-        """
-        cur.execute(query, (likes, dislikes, user_id))
-        conn.commit()
-    conn.close()
 
