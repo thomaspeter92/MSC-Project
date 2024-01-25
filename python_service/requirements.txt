@@ -2,6 +2,5 @@ psycopg2-binary
 # watchdog
 pandas
 # scikit-learn
-spacy
-nltk
-regex
+flask
+flask-cors

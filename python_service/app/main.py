@@ -1,9 +1,15 @@
 from db.database import fetch_profiles
-import recommender.recommender as recommender
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-def main():
-  profiles = fetch_profiles()
+
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/hello', methods=['GET'])
+def process_data():
+  return 'Hello'
 
 
 if __name__ == '__main__':
-  main()
+  app.run(host='0.0.0.0', port=5000)
