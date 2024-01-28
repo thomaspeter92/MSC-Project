@@ -8,6 +8,7 @@ const getUser = async (
   next: NextFunction
 ) => {
   try {
+    console.log('HELLOOOO')
     const user = await prisma.user.findUnique({
       where: {
         email: req.params.email,

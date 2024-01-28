@@ -1,6 +1,6 @@
 psycopg2-binary
-# watchdog
 pandas
-# scikit-learn
+scikit-learn
 flask
 flask-cors
+numpy

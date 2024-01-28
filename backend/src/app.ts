@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { userRouter } from "./routes/user";
+import { connectionsRouter } from "./routes/connections";
 import logger from "pino-http";
 import errorHandler from "./middleware/error";
 import axios from "axios";
@@ -18,6 +19,9 @@ app.use(express.json());
 
 // MOUNT ROUTERS
 app.use("/api/v1/user", userRouter);
+// connections
+app.use("/api/v1/connections", connectionsRouter)
+
 // auth
 // chat
 
@@ -27,10 +31,6 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
-  (async () => {
-    let res = await axios.get("http://python-app:5000/hello");
-    console.log(res.data);
-  })();
 });
 
 /*

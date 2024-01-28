@@ -15,13 +15,27 @@ def get_db_connection():
     return connection
 
 # Simple read function to test the connection
-def fetch_profiles():
+def fetch_profiles(user_id):
     conn = get_db_connection()
-    with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-        cur.execute('SELECT * FROM "Profile" LIMIT 100;')
-        profiles = cur.fetchall()
-    conn.close()
-    print(profiles)
-    return profiles
+
+    try: 
+        with conn.cursor() as cursor:
+            query = 'SELECT sex, orientation FROM "User" WHERE id = %s;'
+            cursor.execute(query, (user_id,))
+            user_info = cursor.fetchone()
+
+        if user_info is None:
+            return []
+        
+        sex, orientation = user_info
+        sex_to_search = 'f' if (sex == 'm' and orientation == 'straight') or (sex == 'f' and orientation == 'gay') else 'm'
+        
+        with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+            query = 'SELECT p.* FROM "Profile" p JOIN "User" u ON p.user_id = u.id WHERE (u.sex = %s AND u.orientation = %s) OR u.id = %s LIMIT 100;'
+            cur.execute(query, (sex_to_search, orientation, user_id))
+            profiles = cur.fetchall()
+        return profiles
+    finally:
+        conn.close()
 
 
