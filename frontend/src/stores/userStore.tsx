@@ -16,6 +16,7 @@ onAuthStateChanged(async (user: any) => {
   if (user) {
     try {
       let res: any = await getUser(user.email as string);
+      console.log(res)
       if (res.data) {
         useUserStore.setState({
           user: res.data,
@@ -26,6 +27,7 @@ onAuthStateChanged(async (user: any) => {
         useUserStore.setState({ user: null, loggedIn: false, loading: false });
       }
     } catch (error) {
+      console.log('hello')
       useUserStore.setState({ user: null, loggedIn: false, loading: false });
     }
   } else {

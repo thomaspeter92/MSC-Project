@@ -24,7 +24,7 @@ const RecentConnections = ({}: Props) => {
     return (
       <div className="p-5 rounded-xl bg-white">
         <h6 className="mb-3">Recent Connections</h6>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {data.data?.length > 0
             ? data?.data?.map((d: any) => (
                 <div
