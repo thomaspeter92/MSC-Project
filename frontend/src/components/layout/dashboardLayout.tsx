@@ -45,14 +45,17 @@ const MENU: Menu = [
 const DashboardLayout = ({ children }: Props) => {
   const [signOut] = useUserStore((state) => [state.signOut]);
   const SignOutIcon = Icons['signOut'];
+  const LoveIcon = Icons['heart']
   const location = useLocation();
   return (
     <div className="flex flex-col m-auto p-5 px-20 h-screen max-w-[1800px]">
       {/* TOP BAR */}
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
-        <h4>Logo</h4>
+        <h4 className="flex items-center gap-1">
+          <LoveIcon strokeWidth={3}size={18} className="text-rose-500"/>
+          Dating<span className="text-rose-500">Service</span></h4>
         <div className="flex items-center gap-5">
-          <Button icon="verify">Get Verified</Button>
+          <Button  size="lg" icon="verify">Get Verified</Button>
           <Notification />
         </div>
       </nav>

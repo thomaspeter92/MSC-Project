@@ -3,22 +3,22 @@ import { getUserProfile, updateProfile } from '../../services/userService';
 import { useUserStore } from '../../stores/userStore';
 import { Icons } from '../../components/icons';
 import { useState } from 'react';
-import { Popover } from '@headlessui/react';
+// import { Popover } from '@headlessui/react';
 import ProfileCard from '../../components/profileCard';
+import { useQueryParams } from "../../hooks/util";
+import { useParams } from "react-router-dom";
 type Props = {};
 
 const Profile = ({}: Props) => {
+  const {id} = useParams()
   const [user] = useUserStore((state) => [state.user]);
-  const { data, isPending, error } = useQuery({
-    queryKey: ['profile'],
-    queryFn: () => getUserProfile(user.id),
+  const { data, isPending } = useQuery({
+    queryKey: ['profile', id ? id : user.id],
+    queryFn: () => getUserProfile(id ? id : user.id),
   });
   const [image, setImage] = useState<any>(null);
   const [showAdditional, setShowAdditional] = useState<boolean>(false);
   const RightIcon = Icons['right'];
-
-  const LocationIcon = Icons['location'];
-  const MoreIcon = Icons['more'];
 
   const userInfo = data?.data;
 

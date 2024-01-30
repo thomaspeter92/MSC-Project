@@ -40,6 +40,7 @@ const getConnections = async (
         id: { in: user_ids},
       },
       select: {
+        id: true,
         first_name: true,
         username: true,
         age: true,
@@ -56,10 +57,13 @@ const getConnections = async (
     })
     const flattenedUsers = users.map(user => {
       // Assume there is always one profile per user
-      const profile = user.Profile[0];
+      const {Profile, ...rest} = user
+
+      const profile = Profile[0];
+      
       // Create a new object with a flat structure
       return {
-        ...user,
+        ...rest,
         ...profile,
       };
     })
