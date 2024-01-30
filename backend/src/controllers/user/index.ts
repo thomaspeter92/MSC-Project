@@ -2,7 +2,7 @@ import getAllUsers from "./getAllUsers";
 import getUserProfileById from "./getUserProfile";
 import handleSignIn from "./handleSignIn";
 import handleSignUp from "./handleSignUp";
-import getUser from './getUser'
+import getUser from "./getUser";
 import updateUserProfile from "./updateUserProfile";
 
 const userController = {
@@ -11,7 +11,7 @@ const userController = {
   handleSignIn,
   handleSignUp,
   getUser,
-  updateUserProfile
-}
+  updateUserProfile,
+};
 
-export default userController
+export default userController;

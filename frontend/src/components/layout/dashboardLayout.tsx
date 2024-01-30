@@ -92,7 +92,7 @@ const DashboardLayout = ({ children }: Props) => {
         {/* CENTER COLUMN */}
         <section className="flex-1 rounded-lg">{children}</section>
         {/* RIGHT COLUMN */}
-        <section className="space-y-5 w-[250px] sticky top-0">
+        <section className="space-y-5 w-[300px] sticky top-0">
           <RecentChats />
           <RecentConnections />
         </section>

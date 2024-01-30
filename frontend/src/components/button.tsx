@@ -4,13 +4,13 @@ import { cn } from '../lib/utils';
 import { Icons } from './icons';
 
 const buttonStyles = cva(
-  'font-medium capitalize block rounded-lg flex items-center justify-center gap-2',
+  'font-medium capitalize block rounded-lg flex items-center justify-center gap-2 whitespace-nowrap',
   {
     variants: {
       intent: {
         primary: 'bg-rose-500 text-white',
         gray: 'bg-gray-200 text-gray-500',
-        text: 'text-rose-400 p-0',
+        text: 'text-rose-400 p-0 justify-start',
         dager: 'bg-red-500 text-white',
       },
       size: {

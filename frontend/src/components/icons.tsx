@@ -14,6 +14,7 @@ import {
   MapPin,
   ChevronsRight,
   UserRoundPlus,
+  MoreHorizontal,
 } from 'lucide-react';
 
 export const Icons = {
@@ -32,4 +33,5 @@ export const Icons = {
   location: MapPin,
   right: ChevronsRight,
   connect: UserRoundPlus,
+  more: MoreHorizontal,
 };

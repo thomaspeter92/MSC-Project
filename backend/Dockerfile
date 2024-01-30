@@ -16,6 +16,8 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json (or yarn.lock) into the container
 COPY package*.json ./
 
+COPY prisma ./prisma/
+
 # Install dependencies
 # Note: Using npm ci is recommended in production environments for faster, more reliable builds
 RUN npm install
@@ -29,4 +31,4 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 8080
 
-CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "./src/app.ts", "prisma migrate dev"]
+CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "./src/app.ts"]

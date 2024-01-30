@@ -1,22 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import { getUserProfile, updateProfile } from "../../services/userService";
-import { useUserStore } from "../../stores/userStore";
-import { Icons } from "../../components/icons";
-import { useState } from "react";
-
+import { useQuery } from '@tanstack/react-query';
+import { getUserProfile, updateProfile } from '../../services/userService';
+import { useUserStore } from '../../stores/userStore';
+import { Icons } from '../../components/icons';
+import { useState } from 'react';
+import { Popover } from '@headlessui/react';
+import ProfileCard from '../../components/profileCard';
 type Props = {};
 
 const Profile = ({}: Props) => {
   const [user] = useUserStore((state) => [state.user]);
   const { data, isPending, error } = useQuery({
-    queryKey: ["profile"],
+    queryKey: ['profile'],
     queryFn: () => getUserProfile(user.id),
   });
   const [image, setImage] = useState<any>(null);
   const [showAdditional, setShowAdditional] = useState<boolean>(false);
-  const RightIcon = Icons['right']
+  const RightIcon = Icons['right'];
 
-  const LocationIcon = Icons["location"];
+  const LocationIcon = Icons['location'];
+  const MoreIcon = Icons['more'];
+
+  const userInfo = data?.data;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -28,59 +32,26 @@ const Profile = ({}: Props) => {
     if (!image) return;
 
     const formData = new FormData();
-    formData.append("image", image);
-    formData.append("id", user.id);
+    formData.append('image', image);
+    formData.append('id', user.id);
 
     const response = await updateProfile(formData);
     console.log(response);
   };
 
-  if (data && !isPending) {
+  if (userInfo && !isPending) {
     return (
       <section className="space-y-5">
-        <div className="bg-white rounded-xl flex">
-          <div className="h-full relative">
-            <img className="object-cover " src={data.data.picture} alt="" />
-          </div>
-          <div className="p-5 space-y-1">
-            <h4>
-              {data.data.first_name}, {data.data.age}
-            </h4>
-            <div className="flex gap-2 items-center text-gray-400 ">
-              <LocationIcon size={15} />
-              <p>Oakland, California</p>
-            </div>
-            <p className="text-sm">{data.data.bio}</p>
-            <div className="flex gap-5 pt-5">
-              <div className="flex-1">
-                <p className="font-bold mb-2">Likes</p>
-                <div className="flex gap-2 flex-wrap">
-                  {data.data?.likes?.map((d: string, i: number) => (
-                    <p
-                      className="p-1 bg-green-100 text-green-600 text-sm px-2 rounded capitalize font-medium"
-                      key={d + i}
-                    >
-                      {d}
-                    </p>
-                  ))}
-                </div>
-              </div>
-              <div className="flex-1">
-                <p className="font-bold mb-2">Dislikes</p>
-                <div className="flex gap-2 flex-wrap">
-                  {data.data?.dislikes?.map((d: string, i: number) => (
-                    <p
-                      className="p-1 bg-red-100 text-red-600 text-sm px-2 rounded capitalize font-medium"
-                      key={d + i}
-                    >
-                      {d}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProfileCard
+          name={userInfo.first_name}
+          bio={userInfo.bio}
+          image={userInfo.picture}
+          likes={userInfo.likes}
+          dislikes={userInfo.dislikes}
+          age={userInfo.age}
+          location={userInfo.location}
+          isConnection={false}
+        />
 
         <div className="bg-white rounded-xl p-5 mb-5 ">
           <h5>About Me</h5>
@@ -89,43 +60,43 @@ const Profile = ({}: Props) => {
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Gender</p>
               <p className="font-semibold">
-                {data.data.sex === "m" ? "Male" : "Female"}
+                {data.data.sex === 'm' ? 'Male' : 'Female'}
               </p>
             </div>
             {/* SMOKES */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Smokes</p>
-              <p className="font-semibold">{data.data.smokes || "?"}</p>
+              <p className="font-semibold">{data.data.smokes || '?'}</p>
             </div>
             {/* HOMETOWN */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Diet</p>
-              <p className="font-semibold">{data.data.diet || "?"}</p>
+              <p className="font-semibold">{data.data.diet || '?'}</p>
             </div>
             {/* DRINKS */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Drinks</p>
-              <p className="font-semibold">{data.data.drinks || "?"}</p>
+              <p className="font-semibold">{data.data.drinks || '?'}</p>
             </div>
             {/* LANGUAGES */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Education</p>
-              <p className="font-semibold">{data.data.education || "?"}</p>
+              <p className="font-semibold">{data.data.education || '?'}</p>
             </div>
             {/* PETS */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Pets</p>
-              <p className="font-semibold">{data.data.pets || "?"}</p>
+              <p className="font-semibold">{data.data.pets || '?'}</p>
             </div>
             {/* EDUCATION */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Job</p>
-              <p className="font-semibold">{data.data.job || "?"}</p>
+              <p className="font-semibold">{data.data.job || '?'}</p>
             </div>
             {/* CHILDREN */}
             <div className="w-1/2 flex items-center">
               <p className=" text-gray-500 text-sm w-24">Children</p>
-              <p className="font-semibold">{data.data.offspring || "?"}</p>
+              <p className="font-semibold">{data.data.offspring || '?'}</p>
             </div>
           </div>
           <hr className="my-5" />
@@ -145,7 +116,8 @@ const Profile = ({}: Props) => {
             className="font-bold text-rose-500 mb-5 flex items-center"
             onClick={() => setShowAdditional(true)}
           >
-            See {showAdditional ? 'less' : 'more'} about {data.data.first_name} <RightIcon size={20} />
+            See {showAdditional ? 'less' : 'more'} about {data.data.first_name}{' '}
+            <RightIcon size={20} />
           </button>
           {showAdditional ? (
             <div className="space-y-5 ">
