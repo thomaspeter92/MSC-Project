@@ -63,7 +63,7 @@ const Connections = ({ }: Props) => {
 
         ))}
       </div>
-      <Modal open={open} onClose={toggleModal}>
+      <Modal className="w-[150ch] overflow-y-scroll" open={open} onClose={toggleModal}>
         <ProfilePreview userId={expanded} />
       </Modal>
     </>

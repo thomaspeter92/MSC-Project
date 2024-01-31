@@ -7,7 +7,7 @@ import { signInValidator } from "../../lib/validations/userValidation";
 
 type Props = {};
 
-const Login = ({}: Props) => {
+const Login = ({ }: Props) => {
   const [signIn, loginFailed] = useUserStore((state) => [
     state.signIn,
     state.loginFailed,
@@ -51,7 +51,7 @@ const Login = ({}: Props) => {
           onChange={formik.handleChange}
           error={formik.errors.password}
         />
-        <Button type="submit">Sign In</Button>
+        <Button size="lg" className="w-full" type="submit">Sign In</Button>
         <hr />
         <p className="text-center">
           Don't have an account yet?{" "}

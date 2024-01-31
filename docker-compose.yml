@@ -16,9 +16,9 @@ services:
       - "5000:5000"
     environment:
       - DB_NAME=postgres
-      - DB_USER=postgres
+      - DB_USER=postgres.fxxqwotagugztamftphi
       - DB_PASS=HeliosChenThomasBuckley
-      - DB_HOST=db.fxxqwotagugztamftphi.supabase.co
+      - DB_HOST=aws-0-eu-west-2.pooler.supabase.com
       - DB_PORT=5432
     volumes:
       - ./python_service:/usr/src/app

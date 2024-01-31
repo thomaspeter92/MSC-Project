@@ -15,6 +15,7 @@ type UserStore = {
 onAuthStateChanged(async (user: any) => {
   if (user) {
     try {
+      console.log('hi')
       let res: any = await getUser(user.email as string);
       console.log(res)
       if (res.data) {

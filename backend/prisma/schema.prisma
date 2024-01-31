@@ -2,9 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native","linux-musl-openssl-3.0.x"]
-
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -13,18 +12,20 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  first_name  String
-  last_name   String
-  email       String    @unique
-  username    String    @unique
-  created_at  DateTime  @default(now())
-  age         Int
-  verified    Boolean   @default(false)
-  sex         Sex
-  orientation String?
-  Profile     Profile[]
-  picture     String?
+  id                 Int           @id @default(autoincrement())
+  first_name         String
+  last_name          String
+  email              String        @unique
+  username           String        @unique
+  created_at         DateTime      @default(now())
+  age                Int
+  verified           Boolean       @default(false)
+  sex                Sex
+  orientation        String?
+  picture            String?
+  Profile            Profile[]
+  init_connections   Connections[] @relation(name: "initiator")
+  target_connections Connections[] @relation(name: "target")
 }
 
 enum Sex {
@@ -66,4 +67,16 @@ model Profile {
   essay7      String?
   essay8      String?
   essay9      String?
+}
+
+model Connections {
+  id           Int      @id @default(autoincrement())
+  created_at   DateTime @default(now())
+  status       String //pending, accepted, blocked
+  initiator_id Int //initiator
+  target_id    Int //target
+  initiator    User     @relation(name: "initiator", fields: [initiator_id], references: [id])
+  target       User     @relation(name: "target", fields: [target_id], references: [id])
+
+  @@unique([initiator_id, target_id])
 }

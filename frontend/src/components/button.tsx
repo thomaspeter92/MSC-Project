@@ -21,6 +21,7 @@ const buttonStyles = cva(
       rounded: {
         full: 'rounded-full',
       },
+
     },
     defaultVariants: {
       intent: 'primary',
