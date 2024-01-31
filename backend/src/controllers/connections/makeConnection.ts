@@ -62,11 +62,8 @@ const makeConnection = async (
       },
     });
 
-
     // return success
     respond(res, 'Connection successful', newConnection)
-
-
   } catch (error) {
     next(error)
   }
