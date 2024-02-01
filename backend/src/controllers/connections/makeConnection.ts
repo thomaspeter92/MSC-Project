@@ -13,8 +13,7 @@ const makeConnection = async (
   next: NextFunction
 ) => {
   try {
-
-    const targetId = req.body.id
+    const targetId = Number(req.body.id)
     if (!targetId) return next(new ErrorResponse(400, 11, "No id provided"));
 
     const token = getBearerToken(req.headers.authorization || "");
@@ -23,17 +22,20 @@ const makeConnection = async (
     // get id of user
     const initiator = await prisma.user.findUnique({
       where: {
-        email: req.params.email,
+        email: fbUser.email,
       },
       select: {
         id: true
       }
     });
     if (!initiator) return next(new ErrorResponse(404, 11, "No target user found"));
+
+    console.log('TARGETTT')
+
     // validate target exists
     const targetUser = await prisma.user.findUnique({
       where: {
-        id: req.body.id,
+        id: targetId,
       }
     });
 
@@ -65,6 +67,7 @@ const makeConnection = async (
     // return success
     respond(res, 'Connection successful', newConnection)
   } catch (error) {
+    console.log(error)
     next(error)
   }
 }
