@@ -1,23 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllUsers, getUserProfile } from '../services/userService';
+import { getUserProfile } from '../services/userService';
 import { Icons } from './icons';
+import { getRecentConnections } from '../services/connectionsService';
 
 type Props = {};
 
 const RecentConnections = ({}: Props) => {
   const { data, isPending, error } = useQuery({
-    queryKey: ['allUsers'],
-    queryFn: getAllUsers,
+    queryKey: ['recent-connections'],
+    queryFn: getRecentConnections,
   });
 
-  const getUser = async (id: string) => {
-    try {
-      let res = await getUserProfile(id);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getUser = async (id: string) => {
+  //   try {
+  //     let res = await getUserProfile(id);
+  //     console.log(res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const UserIcon = Icons['user'];
   if (!isPending && !error) {
@@ -28,7 +29,7 @@ const RecentConnections = ({}: Props) => {
           {data.data?.length > 0
             ? data?.data?.map((d: any) => (
                 <div
-                  onClick={() => getUser(d.id)}
+                  // onClick={} // LINK TO PROFILE OR CHAT?
                   key={d.id}
                   className="flex flex-col items-center"
                 >

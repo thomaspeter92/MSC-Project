@@ -5,12 +5,12 @@ import { Icons } from '../../components/icons';
 import { useState } from 'react';
 // import { Popover } from '@headlessui/react';
 import ProfileCard from '../../components/profileCard';
-import { useQueryParams } from "../../hooks/util";
-import { useParams } from "react-router-dom";
+import { useQueryParams } from '../../hooks/util';
+import { useParams } from 'react-router-dom';
 type Props = {};
 
 const Profile = ({}: Props) => {
-  const {id} = useParams()
+  const { id } = useParams();
   const [user] = useUserStore((state) => [state.user]);
   const { data, isPending } = useQuery({
     queryKey: ['profile', id ? id : user.id],
@@ -43,6 +43,7 @@ const Profile = ({}: Props) => {
     return (
       <section className="space-y-5">
         <ProfileCard
+          userId={userInfo.id}
           name={userInfo.first_name}
           bio={userInfo.bio}
           image={userInfo.picture}

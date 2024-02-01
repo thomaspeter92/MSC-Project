@@ -1,7 +1,10 @@
 import React from 'react';
 import { Icons } from './icons';
 import Button from './button';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { registerConnection } from '../services/connectionsService';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   name: string;
@@ -12,8 +15,8 @@ type Props = {
   dislikes: string[];
   location: string;
   isConnection: boolean;
-  userId?: number
-  onProfileClick?: () => void
+  userId: number;
+  onProfileClick?: () => void;
 };
 
 const ProfileCard = ({
@@ -26,10 +29,39 @@ const ProfileCard = ({
   dislikes,
   location,
   isConnection,
-  onProfileClick
+  onProfileClick,
 }: Props) => {
+  const queryClient = useQueryClient();
   const LocationIcon = Icons['location'];
-  const RightIcon = Icons['right']
+  const RightIcon = Icons['right'];
+
+  const connectMutation = useMutation({
+    mutationFn: registerConnection,
+  });
+
+  const handleConnect = () => {
+    connectMutation.mutate(
+      { id: userId, status: 'request' },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['connections'] });
+        },
+      }
+    );
+  };
+
+  const handleDelete = () => {
+    // Here, save the connection as BLOCKED.
+    connectMutation.mutate(
+      { id: userId, status: 'blocked' },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['connections'] });
+        },
+      }
+    );
+  };
+
   return (
     <div className="bg-white p-5 rounded-xl flex flex-col xl:flex-row gap-5">
       <div className="bg-gray-100 min-w-[200px] h-[200px]  xl:h-auto  relative rounded-lg overflow-hidden">
@@ -81,14 +113,22 @@ const ProfileCard = ({
         </div>
         {isConnection ? (
           <>
-            <button onClick={onProfileClick} className="py-5 font-bold flex items-center text-rose-400">
+            <button
+              onClick={onProfileClick}
+              className="py-5 font-bold flex items-center text-rose-400"
+            >
               See More about {name} <RightIcon size={20} />
             </button>
             <div className="flex gap-5">
-              <Button intent={'gray'} size={'lg'}>
+              <Button onClick={handleDelete} intent={'gray'} size={'lg'}>
                 Delete
               </Button>
-              <Button size={'lg'} icon="connect" intent={'primary'}>
+              <Button
+                onClick={handleConnect}
+                size={'lg'}
+                icon="connect"
+                intent={'primary'}
+              >
                 Connect
               </Button>
             </div>{' '}

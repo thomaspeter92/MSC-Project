@@ -5,32 +5,31 @@ import { useQuery } from '@tanstack/react-query';
 import { getConnections } from '../../services/connectionsService';
 import LoadingSpinner from '../../components/loadingSpinner';
 import ProfileCard from '../../components/profileCard';
-import Modal from "../../components/modal";
-import { useModal } from "../../hooks/useModal";
-import ProfilePreview from "../../components/profilePreview";
+import Modal from '../../components/modal';
+import { useModal } from '../../hooks/useModal';
+import ProfilePreview from '../../components/profilePreview';
 
 type Props = {};
 
-const Connections = ({ }: Props) => {
-  const { open, toggleModal } = useModal(false)
-  const [expanded, setExpanded] = useState(0)
+const Connections = ({}: Props) => {
+  const { open, toggleModal } = useModal(false);
+  const [expanded, setExpanded] = useState(0);
   const HeartIcon = Icons['heart'];
 
-  const {
-    data: users,
-    isPending,
-  } = useQuery({
+  const { data: users, isFetching } = useQuery({
     queryKey: ['connections'],
     queryFn: () => getConnections(),
     retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const handleExpand = (id: number) => {
-    setExpanded(id)
-    toggleModal()
-  }
+    setExpanded(id);
+    toggleModal();
+  };
 
-  if (isPending) {
+  if (isFetching) {
     return (
       <div className="w-full flex justify-center items-center h-full">
         <LoadingSpinner />
@@ -46,6 +45,7 @@ const Connections = ({ }: Props) => {
         </h3>
         {users?.data?.map((d: any) => (
           <ProfileCard
+            key={d.id}
             userId={d.id}
             name={d.first_name}
             age={d.age}
@@ -60,10 +60,13 @@ const Connections = ({ }: Props) => {
             isConnection
             onProfileClick={() => handleExpand(d.id)}
           />
-
         ))}
       </div>
-      <Modal className="w-[150ch] overflow-y-scroll" open={open} onClose={toggleModal}>
+      <Modal
+        className="w-[150ch] overflow-y-scroll"
+        open={open}
+        onClose={toggleModal}
+      >
         <ProfilePreview userId={expanded} />
       </Modal>
     </>
