@@ -1,11 +1,9 @@
-import { Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction } from "express";
 import { getBearerToken } from "../../utils/getBearerToken";
 import firebaseService from "../../lib/firebase/firebaseService";
 import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import respond from "../../utils/response";
-
-
 
 const makeConnection = async (
   req: Request,
@@ -13,8 +11,12 @@ const makeConnection = async (
   next: NextFunction
 ) => {
   try {
-    const targetId = Number(req.body.id)
-    if (!targetId) return next(new ErrorResponse(400, 11, "No id provided"));
+    const statuses = ["pending", "blocked"];
+    const targetId = Number(req.body.id);
+    const status = req.body.status;
+
+    if (!targetId || !status || !statuses.includes(status))
+      return next(new ErrorResponse(400, 11, "No id or status provided"));
 
     const token = getBearerToken(req.headers.authorization || "");
     const fbUser = await firebaseService.verifyToken(token ? token : "");
@@ -25,21 +27,25 @@ const makeConnection = async (
         email: fbUser.email,
       },
       select: {
-        id: true
-      }
+        id: true,
+      },
     });
-    if (!initiator) return next(new ErrorResponse(404, 11, "No target user found"));
 
-    console.log('TARGETTT')
+    if (!initiator)
+      return next(new ErrorResponse(404, 11, "No target user found"));
 
     // validate target exists
     const targetUser = await prisma.user.findUnique({
       where: {
         id: targetId,
-      }
+      },
+      select: {
+        id: true,
+      },
     });
 
-    if (!targetUser) return next(new ErrorResponse(404, 11, "No target user found"));
+    if (!targetUser)
+      return next(new ErrorResponse(404, 11, "No target user found"));
 
     // Check for existing connection
     const prevConnection = await prisma.connections.findFirst({
@@ -60,16 +66,15 @@ const makeConnection = async (
       data: {
         initiator_id: initiator.id,
         target_id: targetId,
-        status: "pending", // Assuming you have a status field
+        status: status, // Assuming you have a status field
       },
     });
 
-    // return success
-    respond(res, 'Connection successful', newConnection)
+    respond(res, "Connection successful", newConnection);
   } catch (error) {
-    console.log(error)
-    next(error)
+    console.log(error);
+    next(error);
   }
-}
+};
 
-export default makeConnection
+export default makeConnection;

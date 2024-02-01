@@ -72,7 +72,7 @@ model Profile {
 model Connections {
   id           Int      @id @default(autoincrement())
   created_at   DateTime @default(now())
-  status       String //pending, accepted, blocked
+  status       String //pending, active, blocked
   initiator_id Int //initiator
   target_id    Int //target
   initiator    User     @relation(name: "initiator", fields: [initiator_id], references: [id])
