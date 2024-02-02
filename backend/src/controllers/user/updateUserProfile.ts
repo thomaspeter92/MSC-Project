@@ -7,11 +7,7 @@ import ErrorResponse from "../../utils/errorResponse";
 import { supabase } from "../../lib/supabase/supabaseInit";
 import { getBearerToken } from "../../utils/getBearerToken";
 
-
-type UpdateProfileRequestBody = {
-  
-};
-
+type UpdateProfileRequestBody = {};
 
 const updateUserProfile = async (
   req: Request,
@@ -23,37 +19,38 @@ const updateUserProfile = async (
     const requestBody: UpdateProfileRequestBody = req.body;
     const token = getBearerToken(req.headers.authorization || "");
     const user = await firebaseService.verifyToken(token ? token : "");
-    const profilePicture = req.file?.buffer
-    console.log(req.body)
+    const profilePicture = req.file?.buffer;
+    console.log(req.body);
 
-    if(profilePicture) {
-      const { error } = await supabase
-        .storage
-        .from('gallery')
+    if (profilePicture) {
+      const { error } = await supabase.storage
+        .from("gallery")
         .upload(`${user.uid}/profile.png`, profilePicture, {
-          cacheControl: '3600',
-          upsert: false
-        })
-      if(error){
-        return next(new ErrorResponse(500, 12, "unable to upload image"))
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (error) {
+        return next(new ErrorResponse(500, 50, "unable to upload image"));
       }
-
     }
 
     await prisma.user.update({
       data: {
-        picture: 'https://fxxqwotagugztamftphi.supabase.co/storage/v1/object/public/gallery/'+user.uid+'/profile.png'
+        picture:
+          "https://fxxqwotagugztamftphi.supabase.co/storage/v1/object/public/gallery/" +
+          user.uid +
+          "/profile.png",
       },
       where: {
-        id: Number(req.body.id)
-      }
-    })
-    
+        id: Number(req.body.id),
+      },
+    });
+
     // Send success response.
-    respond(res, "Picture posted", {})
+    respond(res, "Picture posted", {});
   } catch (error) {
     next(error);
   }
 };
 
-export default updateUserProfile
+export default updateUserProfile;

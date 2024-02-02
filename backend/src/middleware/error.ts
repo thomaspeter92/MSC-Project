@@ -10,17 +10,20 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-
   let error: ErrorResponse;
 
   // Check if FIREBASE ERROR.
   if (err.code in firebaseErrors) {
-    let fbError = firebaseErrors[err.code as keyof typeof firebaseErrors]
-    error = new ErrorResponse(fbError.statusCode || 500, fbError.errorCode || 500, fbError.message || 'Something went wrong');
+    let fbError = firebaseErrors[err.code as keyof typeof firebaseErrors];
+    error = new ErrorResponse(
+      fbError.statusCode || 500,
+      fbError.errorCode || 500,
+      fbError.message || "Something went wrong"
+    );
   } else if (err instanceof PrismaClientValidationError) {
     let message = "Invalid inputs";
     let statusCode = 415;
-    let errorCode = 20;
+    let errorCode = 40;
     error = new ErrorResponse(statusCode, errorCode, message);
   } else {
     error = err;

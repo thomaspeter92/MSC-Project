@@ -3,7 +3,9 @@ import { getBearerToken } from "../../utils/getBearerToken";
 import firebaseService from "../../lib/firebase/firebaseService";
 import prisma from "../../db/prisma";
 import respond from "../../utils/response";
-
+import userDb from "../../db/userDb";
+import ErrorResponse from "../../utils/errorResponse";
+import connectionsDb from "../../db/connectionsDb";
 const getRecentConnections = async (
   req: Request,
   res: Response,
@@ -14,54 +16,12 @@ const getRecentConnections = async (
     const token = getBearerToken(req.headers.authorization || "");
     const fbUser = await firebaseService.verifyToken(token ? token : "");
 
-    let data = await prisma.user.findMany({
-      where: { email: fbUser.email },
-      select: {
-        init_connections: {
-          where: {
-            status: "active",
-          },
-          select: {
-            target: {
-              select: {
-                first_name: true,
-                picture: true,
-                id: true,
-              },
-            },
-          },
-        },
-        target_connections: {
-          where: {
-            status: "active",
-          },
-          select: {
-            initiator: {
-              select: {
-                first_name: true,
-                picture: true,
-                id: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    if (!fbUser) return next(new ErrorResponse(404, 11, "No user found"));
 
-    let connections: {
-      id: number;
-      first_name: string;
-      picture: string | null;
-    }[] = [];
+    const dbUser = await userDb.getUserByEmail(fbUser.email as string);
+    const dbConnections = await connectionsDb.getConnections(dbUser.id, 10);
 
-    data[0]?.init_connections?.forEach((d) => {
-      connections.push(d.target);
-    });
-    data[0]?.target_connections?.forEach((d) => {
-      connections.push(d.initiator);
-    });
-
-    respond(res, "success", connections);
+    respond(res, "success", dbConnections);
   } catch (error) {
     next(error);
   }

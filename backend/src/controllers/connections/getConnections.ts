@@ -5,6 +5,7 @@ import respond from "../../utils/response";
 import pythonService from "../../services/pythonService";
 import { getBearerToken } from "../../utils/getBearerToken";
 import firebaseService from "../../lib/firebase/firebaseService";
+import userDb from "../../db/userDb";
 
 const getConnections = async (
   req: Request,
@@ -14,63 +15,27 @@ const getConnections = async (
   try {
     // Verify the user
     const token = getBearerToken(req.headers.authorization || "");
-    const user = await firebaseService.verifyToken(token ? token : "");
-
+    const fbUser = await firebaseService.verifyToken(token ? token : "");
 
     // Decoded firebase token will hold user email, use this to find them from the db.
-    const dbUser  = await prisma.user.findUnique({
-      where: {
-        email: user.email
-      }
-    })    
-    if(!dbUser) return next(new ErrorResponse(401, 11, 'User not found in DB'))
+    const dbUser = await userDb.getUserByEmail(fbUser.email as string);
+    if (!dbUser)
+      return next(new ErrorResponse(401, 11, "User not found in DB"));
 
-    const userId = dbUser.id
+    const userId = dbUser.id;
 
-    console.log(dbUser)
+    // Send Req to Python service
+    const response = await pythonService.post("/getConnections", {
+      user_id: userId,
+    });
+    const user_ids = response.data;
 
-    const response = await pythonService.post('/getConnections', {
-      "user_id": userId,
-    })
-    const user_ids = response.data
-    console.log(response.data)
+    const users = await userDb.getListOfUsers(user_ids);
 
-    const users = await prisma.user.findMany({
-      where: {
-        id: { in: user_ids},
-      },
-      select: {
-        id: true,
-        first_name: true,
-        username: true,
-        age: true,
-        picture: true,
-        Profile: {
-          select: {
-            location: true,
-            bio: true,
-            likes: true,
-            dislikes: true
-          }
-        }
-      }
-    })
-    const flattenedUsers = users.map(user => {
-      // Assume there is always one profile per user
-      const {Profile, ...rest} = user
-
-      const profile = Profile[0];
-      
-      // Create a new object with a flat structure
-      return {
-        ...rest,
-        ...profile,
-      };
-    })
-    respond(res, 'Success', flattenedUsers)
+    respond(res, "Success", users);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-export default getConnections
+export default getConnections;

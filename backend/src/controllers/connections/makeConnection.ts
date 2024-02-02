@@ -4,6 +4,8 @@ import firebaseService from "../../lib/firebase/firebaseService";
 import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import respond from "../../utils/response";
+import userDb from "../../db/userDb";
+import connectionsDb from "../../db/connectionsDb";
 
 const makeConnection = async (
   req: Request,
@@ -16,59 +18,36 @@ const makeConnection = async (
     const status = req.body.status;
 
     if (!targetId || !status || !statuses.includes(status))
-      return next(new ErrorResponse(400, 11, "No id or status provided"));
+      return next(new ErrorResponse(400, 40, "No id or status provided"));
 
     const token = getBearerToken(req.headers.authorization || "");
     const fbUser = await firebaseService.verifyToken(token ? token : "");
 
     // get id of user
-    const initiator = await prisma.user.findUnique({
-      where: {
-        email: fbUser.email,
-      },
-      select: {
-        id: true,
-      },
-    });
-
+    const initiator = await userDb.getUserByEmail(fbUser.email as string);
     if (!initiator)
       return next(new ErrorResponse(404, 11, "No target user found"));
 
     // validate target exists
-    const targetUser = await prisma.user.findUnique({
-      where: {
-        id: targetId,
-      },
-      select: {
-        id: true,
-      },
-    });
-
+    const targetUser = await userDb.getUserById(targetId);
     if (!targetUser)
       return next(new ErrorResponse(404, 11, "No target user found"));
 
     // Check for existing connection
-    const prevConnection = await prisma.connections.findFirst({
-      where: {
-        OR: [
-          { initiator_id: initiator.id, target_id: targetId },
-          { initiator_id: targetId, target_id: initiator.id },
-        ],
-      },
-    });
-
-    if (prevConnection) {
-      return next(new ErrorResponse(400, 12, "Connection already exists"));
+    const prevConnection = await connectionsDb.checkConnection(
+      initiator.id,
+      targetId
+    );
+    if (prevConnection?.length > 0) {
+      return next(new ErrorResponse(400, 20, "Connection already exists"));
     }
 
     // create new connection with 'pending'
-    const newConnection = await prisma.connections.create({
-      data: {
-        initiator_id: initiator.id,
-        target_id: targetId,
-        status: status, // Assuming you have a status field
-      },
-    });
+    const newConnection = await connectionsDb.createConnection(
+      initiator.id,
+      targetId,
+      status // can be block or request
+    );
 
     respond(res, "Connection successful", newConnection);
   } catch (error) {

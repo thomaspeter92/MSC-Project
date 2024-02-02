@@ -1,7 +1,5 @@
-import React from 'react';
 import { Icons } from './icons';
 import Button from './button';
-import { Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { registerConnection } from '../services/connectionsService';
 import { useQueryClient } from '@tanstack/react-query';
@@ -41,7 +39,7 @@ const ProfileCard = ({
 
   const handleConnect = () => {
     connectMutation.mutate(
-      { id: userId, status: 'request' },
+      { id: userId, status: 'pending' },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['connections'] });

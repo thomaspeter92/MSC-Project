@@ -11,21 +11,12 @@ const RecentConnections = ({}: Props) => {
     queryFn: getRecentConnections,
   });
 
-  // const getUser = async (id: string) => {
-  //   try {
-  //     let res = await getUserProfile(id);
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const UserIcon = Icons['user'];
   if (!isPending && !error) {
     return (
       <div className="p-5 rounded-xl bg-white">
         <h6 className="mb-3">Recent Connections</h6>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="flex flex-wrap gap-4">
           {data.data?.length > 0
             ? data?.data?.map((d: any) => (
                 <div
