@@ -17,7 +17,7 @@ userRouter.get('/profile/:id', userController.getUserProfileById)
 userRouter.post('/signup', userController.handleSignUp)
 
 // sign in
-userRouter.post('/signin',userController.handleSignIn)
+userRouter.post('/signin', userController.handleSignIn)
 
 // edit user
-userRouter.post('/updateUser', upload.single('image'), userController.updateUserProfile)
+userRouter.post('/updatePicture', upload.single('image'), userController.updateProfilePicture)

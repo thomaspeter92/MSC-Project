@@ -19,9 +19,12 @@ type Props = {
   placeholder: string;
   size?: "md";
   icon?: keyof typeof Icons;
-  error: string | undefined;
+  error?: string | boolean;
   value: string;
   name: string;
+  label?: string;
+  min?: string;
+  max?: string;
 };
 
 const TextInput = ({
@@ -33,11 +36,16 @@ const TextInput = ({
   error,
   value,
   name,
+  label,
+  min, max
 }: Props) => {
   const Icon = Icons[icon as keyof typeof Icons];
   const ErrorIcon = Icons["alertCircle"];
   return (
-    <div>
+    <div className="w-full">
+      {label ?
+        <label className="text-rose-400 text-sm font-semibold block mb-1">{label}</label>
+        : null}
       <div className="relative">
         {icon ? (
           <Icon
@@ -53,13 +61,15 @@ const TextInput = ({
           className={cn(
             InputStyles({ size }),
             icon ? "pl-9" : "",
-            error ? "border-red-500 bg-red-100" : "",
+            error ? "border border-red-500 bg-red-100" : "",
           )}
           placeholder={placeholder}
+          min={min}
+          max={max}
         />
       </div>
       {error ? (
-        <p className="text-sm font-semibold text-red-500 flex items-center  gap-1 mt-1">
+        <p className="text-sm font-semibold text-red-500 flex items-center gap-1 mt-1">
           <ErrorIcon size={15} />
           {error}
         </p>

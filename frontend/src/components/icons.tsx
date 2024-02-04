@@ -4,6 +4,7 @@ import {
   Settings,
   User2,
   X,
+  CheckCircle,
   Lock,
   Mail,
   MessagesSquare,
@@ -15,6 +16,8 @@ import {
   ChevronsRight,
   UserRoundPlus,
   MoreHorizontal,
+  ChevronsUpDown,
+  FileUp
 } from 'lucide-react';
 
 export const Icons = {
@@ -27,6 +30,7 @@ export const Icons = {
   lock: Lock,
   messages: MessagesSquare,
   heart: Heart,
+  checkCircle: CheckCircle,
   signOut: LogOut,
   bell: Bell,
   verify: BadgeCheck,
@@ -34,4 +38,7 @@ export const Icons = {
   right: ChevronsRight,
   connect: UserRoundPlus,
   more: MoreHorizontal,
+  upDown: ChevronsUpDown,
+  upload: FileUp,
+  ellipsis: MoreHorizontal
 };

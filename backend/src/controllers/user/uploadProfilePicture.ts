@@ -5,11 +5,13 @@ import firebaseService from "../../lib/firebase/firebaseService";
 import respond from "../../utils/response";
 import ErrorResponse from "../../utils/errorResponse";
 import { supabase } from "../../lib/supabase/supabaseInit";
-import { getBearerToken } from "../../utils/getBearerToken";
+import { getBearerToken } from "../../utils/getBearerToken"; import userDb from "../../db/userDb";
 
-type UpdateProfileRequestBody = {};
+type UpdateProfileRequestBody = {
+  email: string
+};
 
-const updateUserProfile = async (
+const uploadProfilePicture = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -17,34 +19,23 @@ const updateUserProfile = async (
   try {
     // validate inputs
     const requestBody: UpdateProfileRequestBody = req.body;
-    const token = getBearerToken(req.headers.authorization || "");
-    const user = await firebaseService.verifyToken(token ? token : "");
+    const email = requestBody?.email
     const profilePicture = req.file?.buffer;
-    console.log(req.body);
+
+    let dbUser = await userDb.getUserByEmail(email)
 
     if (profilePicture) {
       const { error } = await supabase.storage
         .from("gallery")
-        .upload(`${user.uid}/profile.png`, profilePicture, {
+        .upload(`${dbUser.id}/profile.png`, profilePicture, {
           cacheControl: "3600",
           upsert: false,
         });
       if (error) {
         return next(new ErrorResponse(500, 50, "unable to upload image"));
       }
+      await userDb.insertPicture({ link: "https://fxxqwotagugztamftphi.supabase.co/storage/v1/object/public/gallery/" + dbUser.id + "/profile.png", user_id: dbUser.id })
     }
-
-    await prisma.user.update({
-      data: {
-        picture:
-          "https://fxxqwotagugztamftphi.supabase.co/storage/v1/object/public/gallery/" +
-          user.uid +
-          "/profile.png",
-      },
-      where: {
-        id: Number(req.body.id),
-      },
-    });
 
     // Send success response.
     respond(res, "Picture posted", {});
@@ -53,4 +44,4 @@ const updateUserProfile = async (
   }
 };
 
-export default updateUserProfile;
+export default uploadProfilePicture;

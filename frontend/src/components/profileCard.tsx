@@ -3,6 +3,9 @@ import Button from './button';
 import { useMutation } from '@tanstack/react-query';
 import { registerConnection } from '../services/connectionsService';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from "react";
+import { createClient } from "pexels";
+
 
 type Props = {
   name: string;
@@ -32,6 +35,9 @@ const ProfileCard = ({
   const queryClient = useQueryClient();
   const LocationIcon = Icons['location'];
   const RightIcon = Icons['right'];
+  const [photo, setPhoto] = useState()
+  const client = createClient('cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZg')
+
 
   const connectMutation = useMutation({
     mutationFn: registerConnection,
@@ -60,6 +66,13 @@ const ProfileCard = ({
     );
   };
 
+  useEffect(() => {
+    client.photos.search({ query: 'man', per_page: 1 })
+      .then((photos: any) => { setPhoto(photos) });
+  }, [])
+
+  console.log(photo)
+
   return (
     <div className="bg-white p-5 rounded-xl flex flex-col xl:flex-row gap-5">
       <div className="bg-gray-100 min-w-[200px] h-[200px]  xl:h-auto  relative rounded-lg overflow-hidden">
@@ -70,10 +83,10 @@ const ProfileCard = ({
         />
       </div>
       <div className="">
-        <h5>
+        <h5 className="capitalize">
           {name}, {age}
         </h5>
-        <div className="flex gap-2 items-center text-gray-400">
+        <div className="flex gap-2 items-center text-gray-400 capitalize">
           <LocationIcon size={15} />
           <p className="capitalize">{location}</p>
         </div>

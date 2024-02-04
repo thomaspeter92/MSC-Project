@@ -1,8 +1,13 @@
+import { SignUpForm } from "../pages/Signup";
 import api from './api';
 
 export const signIn = () => {
   return api.post('/user/signin', {});
 };
+
+export const signUp = (body: {}) => {
+  return api.post('/user/signup', body)
+}
 
 export const getAllUsers = () => {
   return api.get('/user/all');
@@ -16,6 +21,6 @@ export const getUser = async (email: string) => {
   return api.get('/user/' + email);
 };
 
-export const updateProfile = async (body: any) => {
-  return api.post('/user/updateUser', body);
+export const updateProfilePicture = async (body: any) => {
+  return api.post('/user/updatePicture', body);
 };

@@ -16,7 +16,6 @@ model User {
   first_name         String
   last_name          String
   email              String        @unique
-  username           String        @unique
   created_at         DateTime      @default(now())
   age                Int
   verified           Boolean       @default(false)

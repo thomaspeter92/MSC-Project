@@ -4,6 +4,8 @@ import prisma from "../../db/prisma";
 import firebaseService from "../../lib/firebase/firebaseService";
 import respond from "../../utils/response";
 import ErrorResponse from "../../utils/errorResponse";
+import userDb from "../../db/userDb";
+import { supabase } from "../../lib/supabase/supabaseInit";
 
 type SignUpRequestBody = {
   email: string;
@@ -12,7 +14,8 @@ type SignUpRequestBody = {
   first_name: string;
   last_name: string;
   sex: Sex;
-  username: string;
+  likes: string[];
+  dislikes: string[];
 };
 
 const handleSignUp = async (
@@ -23,6 +26,7 @@ const handleSignUp = async (
   try {
     let fbUser = null;
     let dbUser = null;
+    const profilePicture = req?.file?.buffer
 
     // validate inputs
     const requestBody: SignUpRequestBody = req.body;
@@ -33,23 +37,17 @@ const handleSignUp = async (
         email: requestBody.email,
         password: requestBody.password,
       });
+
     } catch (error) {
       throw error
     }
 
     try {
-      // post to db
-      dbUser = await prisma.user.create({
-        data: {
-          email: requestBody.email,
-          first_name: requestBody.first_name,
-          last_name: requestBody.last_name,
-          age: Number(requestBody.age),
-          sex: requestBody.sex,
-          username: requestBody.username,
-          verified: false,
-        },
-      });
+      dbUser = await userDb.createUser(requestBody)
+      console.log(dbUser)
+
+      // move this into a another try catch and rollback the account creation if it fails.
+      await userDb.createUserProfile({ id: dbUser.id, likes: requestBody.likes, dislikes: requestBody.dislikes })
     } catch (error) {
       // roll back firebase if db failed
       // if the rollback fails, how to handle it?
@@ -58,10 +56,11 @@ const handleSignUp = async (
       await firebaseService.deleteUser(fbUser!.uid);
       throw error;
     }
+
     // Send success response.
     respond(res, "User signed up", {})
   } catch (error) {
-    console.log('ERRRRRRRRRROR')
+    console.log(error)
     next(error);
   }
 };

@@ -1,9 +1,8 @@
-import React from 'react';
 import Button from '../../components/button';
 
 type Props = {};
 
-const Settings = (props: Props) => {
+const Settings = ({ }: Props) => {
   return (
     <div className="rounded-xl p-10 bg-white shadow-main space-y-5">
       <div className="space-y-3 pb-5 border-b border-gray-200">
@@ -24,11 +23,6 @@ const Settings = (props: Props) => {
         <div className="flex gap-5">
           <h6 className="w-1/5 text-gray-600">Email Address</h6>
           <p className="text-gray-500">thomastest@test.com</p>
-          <button className="text-rose-500 font-bold ml-auto">Edit</button>
-        </div>
-        <div className="flex gap-5">
-          <h6 className="w-1/5 text-gray-600">Username</h6>
-          <p className="text-gray-500">user12345</p>
           <button className="text-rose-500 font-bold ml-auto">Edit</button>
         </div>
         <div className="flex gap-5">

@@ -8,16 +8,20 @@ import ProfileCard from '../../components/profileCard';
 import Modal from '../../components/modal';
 import { useModal } from '../../hooks/useModal';
 import ProfilePreview from '../../components/profilePreview';
+import { useUserStore } from "../../stores/userStore";
 
 type Props = {};
 
-const Connections = ({}: Props) => {
+const Connections = ({ }: Props) => {
   const { open, toggleModal } = useModal(false);
   const [expanded, setExpanded] = useState(0);
+  const [user] = useUserStore((state) => [state.user]);
+  console.log(user)
+
   const HeartIcon = Icons['heart'];
 
   const { data: users, isFetching } = useQuery({
-    queryKey: ['connections'],
+    queryKey: ['connections', user.email],
     queryFn: () => getConnections(),
     retry: false,
     refetchOnWindowFocus: false,
@@ -43,6 +47,7 @@ const Connections = ({}: Props) => {
           <HeartIcon />
           Here are today's suggestions:
         </h3>
+        <p>You cannot receieve connections until you complete your profile</p>
         {users?.data?.map((d: any) => (
           <ProfileCard
             key={d.id}

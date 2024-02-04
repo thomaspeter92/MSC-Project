@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserProfile, updateProfile } from '../../services/userService';
+import { getUserProfile, } from '../../services/userService';
 import { useUserStore } from '../../stores/userStore';
 import { Icons } from '../../components/icons';
 import { useState } from 'react';
@@ -9,7 +9,9 @@ import { useQueryParams } from '../../hooks/util';
 import { useParams } from 'react-router-dom';
 type Props = {};
 
-const Profile = ({}: Props) => {
+// PEXELS API KEY cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZgPEX
+
+const Profile = ({ }: Props) => {
   const { id } = useParams();
   const [user] = useUserStore((state) => [state.user]);
   const { data, isPending } = useQuery({
@@ -19,25 +21,9 @@ const Profile = ({}: Props) => {
   const [image, setImage] = useState<any>(null);
   const [showAdditional, setShowAdditional] = useState<boolean>(false);
   const RightIcon = Icons['right'];
+  const MoreIcon = Icons['ellipsis']
 
   const userInfo = data?.data;
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    // 1 - upload image through supbase client
-    // 2 - get the id of the image
-    // 3 - save the image link to the db
-    console.log(image);
-    if (!image) return;
-
-    const formData = new FormData();
-    formData.append('image', image);
-    formData.append('id', user.id);
-
-    const response = await updateProfile(formData);
-    console.log(response);
-  };
 
   if (userInfo && !isPending) {
     return (
@@ -55,7 +41,12 @@ const Profile = ({}: Props) => {
         />
 
         <div className="bg-white rounded-xl p-5 mb-5 ">
-          <h5>About Me</h5>
+          <div className="w-full flex justify-between">
+            <h5>About Me</h5>
+            <button>
+              <MoreIcon size={30} className="text-rose-500 hover:text-rose-300" />
+            </button>
+          </div>
           <div className="flex flex-wrap items-center space-y-1 capitalize">
             {/* GENDER */}
             <div className="w-1/2 flex items-center">
@@ -103,7 +94,7 @@ const Profile = ({}: Props) => {
           <hr className="my-5" />
           <h5>Gallery</h5>
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <input
               type="file"
               accept="image/"
