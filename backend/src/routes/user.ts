@@ -21,3 +21,5 @@ userRouter.post('/signin', userController.handleSignIn)
 
 // edit user
 userRouter.post('/updatePicture', upload.single('image'), userController.updateProfilePicture)
+
+userRouter.post('/updateAboutInfo', userController.updateAboutMe)

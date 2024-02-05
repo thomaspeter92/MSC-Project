@@ -24,3 +24,7 @@ export const getUser = async (email: string) => {
 export const updateProfilePicture = async (body: any) => {
   return api.post('/user/updatePicture', body);
 };
+
+export const updateAboutInfo = async (body: any) => {
+  return api.post('/user/updateAboutInfo', body)
+}

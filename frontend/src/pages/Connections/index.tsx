@@ -9,6 +9,7 @@ import Modal from '../../components/modal';
 import { useModal } from '../../hooks/useModal';
 import ProfilePreview from '../../components/profilePreview';
 import { useUserStore } from "../../stores/userStore";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -26,12 +27,14 @@ const Connections = ({ }: Props) => {
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
+    enabled: user.complete
   });
 
   const handleExpand = (id: number) => {
     setExpanded(id);
     toggleModal();
   };
+  console.log(user)
 
   if (isFetching) {
     return (
@@ -47,7 +50,9 @@ const Connections = ({ }: Props) => {
           <HeartIcon />
           Here are today's suggestions:
         </h3>
-        <p>You cannot receieve connections until you complete your profile</p>
+        {!user.complete ?
+          <p>Please <Link to="/profile" className="font-bold text-rose-400">complete your profile</Link> to begin making connections. Your profile data is needed to help find you the perfect match.</p>
+          : null}
         {users?.data?.map((d: any) => (
           <ProfileCard
             key={d.id}

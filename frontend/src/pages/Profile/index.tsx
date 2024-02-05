@@ -3,10 +3,15 @@ import { getUserProfile, } from '../../services/userService';
 import { useUserStore } from '../../stores/userStore';
 import { Icons } from '../../components/icons';
 import { useState } from 'react';
-// import { Popover } from '@headlessui/react';
 import ProfileCard from '../../components/profileCard';
-import { useQueryParams } from '../../hooks/util';
 import { useParams } from 'react-router-dom';
+import { Popover } from "@headlessui/react";
+import Modal from "../../components/modal";
+import { useModal } from "../../hooks/useModal";
+import SelectInput from "../../components/selectInput";
+import Button from "../../components/button";
+import AboutMeForm from "../../components/profile/aboutMeForm";
+
 type Props = {};
 
 // PEXELS API KEY cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZgPEX
@@ -18,10 +23,13 @@ const Profile = ({ }: Props) => {
     queryKey: ['profile', id ? id : user.id],
     queryFn: () => getUserProfile(id ? id : user.id),
   });
-  const [image, setImage] = useState<any>(null);
   const [showAdditional, setShowAdditional] = useState<boolean>(false);
+  const { open: aboutModalOpen, toggleModal: toggleAboutModal } = useModal(false)
+  const { open: essayModalOpen, toggleModal: toggleEssayModal } = useModal(false)
+
   const RightIcon = Icons['right'];
   const MoreIcon = Icons['ellipsis']
+  const PencilIcon = Icons['pencil']
 
   const userInfo = data?.data;
 
@@ -39,13 +47,20 @@ const Profile = ({ }: Props) => {
           location={userInfo.location}
           isConnection={false}
         />
-
         <div className="bg-white rounded-xl p-5 mb-5 ">
           <div className="w-full flex justify-between">
             <h5>About Me</h5>
-            <button>
-              <MoreIcon size={30} className="text-rose-500 hover:text-rose-300" />
-            </button>
+            <Popover className="relative">
+              <Popover.Button>
+                <MoreIcon size={30} className="text-rose-500 hover:text-rose-300" />
+              </Popover.Button>
+              <Popover.Panel className="absolute top-full right-0 bg-white shadow-main border border-gray-100 rounded">
+                <button onClick={toggleAboutModal} className="text-rose-500 whitespace-nowrap p-3 flex items-center gap-2 hover:bg-rose-100">
+                  <PencilIcon size={20} />
+                  Edit Profile
+                </button>
+              </Popover.Panel>
+            </Popover>
           </div>
           <div className="flex flex-wrap items-center space-y-1 capitalize">
             {/* GENDER */}
@@ -92,27 +107,26 @@ const Profile = ({ }: Props) => {
             </div>
           </div>
           <hr className="my-5" />
-          <h5>Gallery</h5>
-
-          <form>
-            <input
-              type="file"
-              accept="image/"
-              onChange={(e: any) => setImage(e?.target?.files[0])}
-            />
-            <button type="submit">submit</button>
-          </form>
-          <div></div>
-          <hr className="my-5" />
           <button
-            className="font-bold text-rose-500 mb-5 flex items-center"
-            onClick={() => setShowAdditional(true)}
+            className="font-bold text-rose-500 mt-5 flex items-center"
+            onClick={() => setShowAdditional(!showAdditional)}
           >
             See {showAdditional ? 'less' : 'more'} about {data.data.first_name}{' '}
             <RightIcon size={20} />
           </button>
           {showAdditional ? (
-            <div className="space-y-5 ">
+            <div className="space-y-5 py-5 relative">
+              <Popover className="absolute top-0 right-0">
+                <Popover.Button>
+                  <MoreIcon size={30} className="text-rose-500 hover:text-rose-300" />
+                </Popover.Button>
+                <Popover.Panel className="absolute top-full right-0 bg-white shadow-main border border-gray-100 rounded">
+                  <button onClick={toggleEssayModal} className="text-rose-500 whitespace-nowrap p-3 flex items-center gap-2 hover:bg-rose-100">
+                    <PencilIcon size={20} />
+                    Edit My Essays
+                  </button>
+                </Popover.Panel>
+              </Popover>
               <div className="[&>p]:text-sm [&>p]:text-gray-500">
                 <h6>Self Summary</h6>
                 <p>{data.data.essay0}</p>
@@ -156,6 +170,14 @@ const Profile = ({ }: Props) => {
             </div>
           ) : null}
         </div>
+        <Modal open={aboutModalOpen} onClose={toggleAboutModal}>
+          <AboutMeForm profile={data.data} />
+        </Modal>
+        <Modal open={essayModalOpen} onClose={toggleEssayModal}>
+          <div className="p-5 bg-white">
+
+          </div>
+        </Modal>
       </section>
     );
   }

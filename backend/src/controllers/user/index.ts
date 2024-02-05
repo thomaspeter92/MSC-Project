@@ -4,6 +4,7 @@ import handleSignIn from "./handleSignIn";
 import handleSignUp from "./handleSignUp";
 import getUser from "./getUser";
 import updateProfilePicture from "./uploadProfilePicture";
+import updateAboutMe from "./updateAboutMe";
 
 const userController = {
   getAllUsers,
@@ -12,6 +13,7 @@ const userController = {
   handleSignUp,
   getUser,
   updateProfilePicture,
+  updateAboutMe
 };
 
 export default userController;

@@ -26,7 +26,6 @@ const handleSignUp = async (
   try {
     let fbUser = null;
     let dbUser = null;
-    const profilePicture = req?.file?.buffer
 
     // validate inputs
     const requestBody: SignUpRequestBody = req.body;
@@ -37,7 +36,6 @@ const handleSignUp = async (
         email: requestBody.email,
         password: requestBody.password,
       });
-
     } catch (error) {
       throw error
     }
@@ -45,7 +43,6 @@ const handleSignUp = async (
     try {
       dbUser = await userDb.createUser(requestBody)
       console.log(dbUser)
-
       // move this into a another try catch and rollback the account creation if it fails.
       await userDb.createUserProfile({ id: dbUser.id, likes: requestBody.likes, dislikes: requestBody.dislikes })
     } catch (error) {

@@ -25,6 +25,7 @@ model User {
   Profile            Profile[]
   init_connections   Connections[] @relation(name: "initiator")
   target_connections Connections[] @relation(name: "target")
+  complete           Boolean?
 }
 
 enum Sex {
