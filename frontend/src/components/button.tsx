@@ -21,7 +21,6 @@ const buttonStyles = cva(
       rounded: {
         full: 'rounded-full',
       },
-
     },
     defaultVariants: {
       intent: 'primary',
@@ -35,6 +34,7 @@ type Props = {
   icon?: keyof typeof Icons;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
 const Button = ({
@@ -46,14 +46,20 @@ const Button = ({
   icon,
   className,
   onClick,
+  disabled,
 }: Props & VariantProps<typeof buttonStyles>) => {
   const Icon = Icons[icon as keyof typeof Icons];
 
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       type={type}
-      className={cn(buttonStyles({ intent, size, rounded }), className)}
+      className={cn(
+        buttonStyles({ intent, size, rounded }),
+        disabled ? 'bg-gray-300' : '',
+        className
+      )}
     >
       {icon ? <Icon size={20} /> : null}
       {children}

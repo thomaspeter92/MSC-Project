@@ -26,31 +26,47 @@ class UserDb extends Db {
   };
 
   createUser = async (data: any) => {
-    let sql = `INSERT INTO "User" (email, first_name, last_name, age, sex, orientation, verified) VALUES ($1, $2, $3, $4, $5, $6, false) RETURNING id;`
-    let result = await this.query(sql, [data.email, data.first_name, data.last_name, data.age, data.sex, data.orientation]);
+    let sql = `INSERT INTO "User" (email, first_name, last_name, age, sex, orientation, verified) VALUES ($1, $2, $3, $4, $5, $6, false) RETURNING id;`;
+    let result = await this.query(sql, [
+      data.email,
+      data.first_name,
+      data.last_name,
+      data.age,
+      data.sex,
+      data.orientation,
+    ]);
     return result.rows[0] || null;
-  }
+  };
 
-  // For initial creation during sign up. 
+  // For initial creation during sign up.
   createUserProfile = async (data: any) => {
-    let sql = `INSERT INTO "Profile" (user_id, likes, dislikes) VALUES ($1, $2, $3);`
+    let sql = `INSERT INTO "Profile" (user_id, likes, dislikes) VALUES ($1, $2, $3);`;
     let result = await this.query(sql, [data.id, data.likes, data.dislikes]);
     return result.rows[0] || null;
-  }
+  };
 
   // Insert picture URL
-  insertPicture = async (data: { link: string, user_id: number }) => {
-    let sql = `UPDATE "User" SET picture = $1 WHERE id = $2 RETURNING id;`
+  insertPicture = async (data: { link: string; user_id: number }) => {
+    let sql = `UPDATE "User" SET picture = $1 WHERE id = $2 RETURNING id;`;
     let result = await this.query(sql, [data.link, data.user_id]);
-    return result.rows[0] || null
-  }
+    return result.rows[0] || null;
+  };
 
   updateAboutInfo = async (data: any) => {
-    let sql = `UPDATE "Profile" SET diet=$1, offspring=$2, smokes=$3, drinks=$4, education=$5, job=$6, body_type=$7 WHERE user_id = $8;`
-    let result = await this.query(sql, [data.diet, data.offspring, data.smokes, data.drinks, data.education, data.job, data.body_type, data.id]);
-    return result.rows[0] || null
-  }
-
+    let sql = `UPDATE "Profile" SET diet=$1, offspring=$2, smokes=$3, drinks=$4, education=$5, job=$6, body_type=$7, pets=$8 WHERE user_id = $9;`;
+    let result = await this.query(sql, [
+      data.diet,
+      data.offspring,
+      data.smokes,
+      data.drinks,
+      data.education,
+      data.job,
+      data.body_type,
+      data.pets,
+      data.id,
+    ]);
+    return result.rows[0] || null;
+  };
 }
 
 export default new UserDb();
