@@ -3,9 +3,8 @@ import Button from './button';
 import { useMutation } from '@tanstack/react-query';
 import { registerConnection } from '../services/connectionsService';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from "react";
-import { createClient } from "pexels";
-
+import { useEffect, useState } from 'react';
+import { createClient } from 'pexels';
 
 type Props = {
   name: string;
@@ -35,9 +34,10 @@ const ProfileCard = ({
   const queryClient = useQueryClient();
   const LocationIcon = Icons['location'];
   const RightIcon = Icons['right'];
-  const [photo, setPhoto] = useState()
-  const client = createClient('cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZg')
-
+  const [photo, setPhoto] = useState();
+  const client = createClient(
+    'cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZg'
+  );
 
   const connectMutation = useMutation({
     mutationFn: registerConnection,
@@ -67,11 +67,12 @@ const ProfileCard = ({
   };
 
   useEffect(() => {
-    client.photos.search({ query: 'man', per_page: 1 })
-      .then((photos: any) => { setPhoto(photos) });
-  }, [])
+    client.photos.search({ query: 'man', per_page: 1 }).then((photos: any) => {
+      setPhoto(photos);
+    });
+  }, []);
 
-  console.log(photo)
+  console.log(photo);
 
   return (
     <div className="bg-white p-5 rounded-xl flex flex-col xl:flex-row gap-5">
@@ -91,8 +92,11 @@ const ProfileCard = ({
           <p className="capitalize">{location}</p>
         </div>
         <p className=" my-3">
-          {bio ||
-            "This is a placeholder for the user's bio text. This doesnt effect the recommendations."}
+          {bio
+            ? bio
+            : !isConnection && !bio
+              ? 'Please update your personal bio'
+              : "This is a placeholder for the user's bio text. This doesnt effect the recommendations."}
         </p>
         <div className="flex flex-col xl:flex-row gap-3 pt-2">
           <div className="flex-1">

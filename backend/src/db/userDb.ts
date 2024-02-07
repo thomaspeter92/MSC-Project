@@ -67,6 +67,21 @@ class UserDb extends Db {
     ]);
     return result.rows[0] || null;
   };
+
+  getUnfinishedProfile = async (id: number) => {
+    let sql = `SELECT id
+    FROM "Profile"
+    WHERE user_id = $1
+    AND (education IS NULL OR pets IS NULL OR offspring IS NULL OR smokes IS NULL OR drinks IS NULL OR diet IS NULL OR job IS NULL OR body_type IS NULL);`;
+    let result = await this.query(sql, [id]);
+    return result.rows[0] || null;
+  };
+
+  updateUserComplete = async (id: number) => {
+    let sql = `UPDATE "User" SET complete = true WHERE id = $1`;
+    let result = await this.query(sql, [id]);
+    return result.rows[0] || null;
+  };
 }
 
 export default new UserDb();

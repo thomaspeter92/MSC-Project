@@ -1,7 +1,8 @@
-import { create } from "zustand";
-import { signIn, signOutFirebase } from "../services/firebaseService";
-import { getUser, signIn as userSignIn } from "../services/userService";
-import { onAuthStateChanged } from "../services/firebaseService";
+import { create } from 'zustand';
+import { signIn, signOutFirebase } from '../services/firebaseService';
+import { getUser, signIn as userSignIn } from '../services/userService';
+import { onAuthStateChanged } from '../services/firebaseService';
+import { useQuery } from '@tanstack/react-query';
 
 type UserStore = {
   signIn: (email: string, password: string) => void;
@@ -15,9 +16,7 @@ type UserStore = {
 onAuthStateChanged(async (user: any) => {
   if (user) {
     try {
-      console.log('hi')
       let res: any = await getUser(user.email as string);
-      console.log(res)
       if (res.data) {
         useUserStore.setState({
           user: res.data,
@@ -28,7 +27,7 @@ onAuthStateChanged(async (user: any) => {
         useUserStore.setState({ user: null, loggedIn: false, loading: false });
       }
     } catch (error) {
-      console.log('hello')
+      console.log('hello');
       useUserStore.setState({ user: null, loggedIn: false, loading: false });
     }
   } else {
@@ -52,6 +51,9 @@ export const useUserStore = create<UserStore>()((set) => ({
     } catch (error) {
       set({ loggedIn: false, loginFailed: true, loading: false });
     }
+  },
+  setUser: (data: any) => {
+    set({ user: data });
   },
   signOut: async () => {
     try {
