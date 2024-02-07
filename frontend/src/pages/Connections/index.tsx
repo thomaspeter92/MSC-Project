@@ -60,10 +60,7 @@ const Connections = ({ }: Props) => {
             name={d.first_name}
             age={d.age}
             location={d.location}
-            image={
-              d.picture ||
-              'https://fxxqwotagugztamftphi.supabase.co/storage/v1/object/public/gallery/ANTassF7eGgTmbFOMtgYsj5Sn5i2/profile.png'
-            }
+            image={d?.picture}
             likes={d.likes}
             dislikes={d.dislikes}
             bio={d.bio}

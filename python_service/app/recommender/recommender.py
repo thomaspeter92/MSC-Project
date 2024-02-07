@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import MultiLabelBinarizer
-import sys
 
 
 # This function adjusts the similarity based on the weighting given to the likes/dislikes
@@ -33,7 +32,6 @@ def custom_similarity(features, likes_length, dislikes_length):
 
 
 def recommend_for_user(df, similarity_df, user_index, top_n=5):
-  print(f'USER ID: {user_index}', file=sys.stdout)
 
   # Get similarity scores for the user
   user_similarity_scores = similarity_df.loc[user_index]
@@ -49,40 +47,42 @@ def recommend_for_user(df, similarity_df, user_index, top_n=5):
 
 
 def process_profiles(profiles):
-  df = pd.DataFrame(profiles)
-  df = df.set_index('user_id')
+    df = pd.DataFrame(profiles)
+    df = df.set_index('user_id')
 
-  df.drop(columns=['essay0', 'essay1','essay2','essay3','essay4','essay5','essay6','essay7','essay8', 'essay9', 'bio'], inplace=True)
-  categorical_columns = ['body_type', 'education', 'pets', 'diet', 'offspring', 'job']
+    df.drop(columns=['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9', 'bio'], inplace=True)
+    categorical_columns = ['body_type', 'education', 'pets', 'diet', 'offspring', 'job']
 
-  # One-hot encoding for categorical data with multiple value possibilities
-  encoder = OneHotEncoder(sparse_output=False)
-  encoded_data = encoder.fit_transform(df[categorical_columns])
-  # encoded_data_dense = encoded_data.toarray()  # Convert sparse matrix to dense array
+    # One-hot encoding for categorical data with multiple value possibilities
+    encoder = OneHotEncoder(sparse_output=False)
+    encoded_data = encoder.fit_transform(df[categorical_columns])
 
-  # Binary encoding for the binary data (smokes, drinks, religion)
-  df['smokes'] = (df['smokes'] == 'yes').astype(int)
-  df['drinks'] = (df['drinks'] == 'yes').astype(int)
-  df['religion'] = (df['religion'] == 'religious').astype(int)
+    # Binary encoding for the binary data (smokes, drinks, religion)
+    df['smokes'] = (df['smokes'] == 'yes').astype(int)
+    df['drinks'] = (df['drinks'] == 'yes').astype(int)
+    df['religion'] = (df['religion'] == 'religious').astype(int)
 
-  # encoding the likes and dislikes colunns
-  mlb = MultiLabelBinarizer()
-  likes_encoded = mlb.fit_transform(df['likes'])
-  likes_columns = mlb.classes_
-  dislikes_encoded = mlb.fit_transform(df['dislikes'])
-  dislikes_columns = mlb.classes_
-  #prefix these columns to distinguish between likes and dislikes
-  likes_columns = ['like_' + col for col in likes_columns]
-  dislikes_columns = ['dislike_' + col for col in dislikes_columns]
+    # Preparing for consistent encoding of likes and dislikes
+    # Combine all likes and dislikes into a single set for fitting
+    all_likes_dislikes = set().union(*df['likes'], *df['dislikes'])
+    
+    # Initialize MultiLabelBinarizer and fit on the combined set
+    mlb = MultiLabelBinarizer()
+    mlb.fit([all_likes_dislikes])  # Fit on the combined set to ensure consistent columns
 
-  # Combine the binary encoded and the one hot encoded values into one. 
-  combined_features = np.hstack((encoded_data, df[['smokes', 'drinks', 'religion']].values))
-  final_features = np.hstack((combined_features, likes_encoded, dislikes_encoded))
+    # Transform likes and dislikes using the fitted mlb
+    likes_encoded = mlb.transform(df['likes'])
+    dislikes_encoded = mlb.transform(df['dislikes'])
 
-  likes_length = len(likes_encoded[0])
-  dislikes_length = len(dislikes_encoded[0])
+    # Combine the binary encoded, one-hot encoded, and multilabel encoded values into one
+    final_features = np.hstack((encoded_data, df[['smokes', 'drinks', 'religion']].values, likes_encoded, dislikes_encoded))
 
-  custom_similarity_matrix = custom_similarity(final_features, likes_length, dislikes_length)
-  similarity_df = pd.DataFrame(custom_similarity_matrix, index=df.index, columns=df.index)
+    # Calculate the lengths based on the transformed data
+    likes_length = likes_encoded.shape[1]
+    dislikes_length = dislikes_encoded.shape[1]
 
-  return df, similarity_df
+    # Ensure the custom similarity function is correctly implemented
+    custom_similarity_matrix = custom_similarity(final_features, likes_length, dislikes_length)
+    similarity_df = pd.DataFrame(custom_similarity_matrix, index=df.index, columns=df.index)
+
+    return df, similarity_df

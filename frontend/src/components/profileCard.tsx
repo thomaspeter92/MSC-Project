@@ -3,8 +3,6 @@ import Button from './button';
 import { useMutation } from '@tanstack/react-query';
 import { registerConnection } from '../services/connectionsService';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { createClient } from 'pexels';
 
 type Props = {
   name: string;
@@ -34,10 +32,8 @@ const ProfileCard = ({
   const queryClient = useQueryClient();
   const LocationIcon = Icons['location'];
   const RightIcon = Icons['right'];
-  const [photo, setPhoto] = useState();
-  const client = createClient(
-    'cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZg'
-  );
+  const UserIcon = Icons['user1']
+
 
   const connectMutation = useMutation({
     mutationFn: registerConnection,
@@ -66,22 +62,19 @@ const ProfileCard = ({
     );
   };
 
-  useEffect(() => {
-    client.photos.search({ query: 'man', per_page: 1 }).then((photos: any) => {
-      setPhoto(photos);
-    });
-  }, []);
 
-  console.log(photo);
+
 
   return (
     <div className="bg-white p-5 rounded-xl flex flex-col xl:flex-row gap-5">
-      <div className="bg-gray-100 min-w-[200px] h-[200px]  xl:h-auto  relative rounded-lg overflow-hidden">
-        <img
+      <div className="bg-gray-100 min-w-[200px] h-[200px]  xl:h-auto  relative rounded-lg overflow-hidden flex justify-center items-center">
+        {image ? <img
           loading="lazy"
           className="object-cover w-full h-full top-0 left-0 absolute"
           src={image}
-        />
+        /> :
+          <UserIcon size={100} className="text-rose-200" />
+        }
       </div>
       <div className="">
         <h5 className="capitalize">

@@ -8,15 +8,15 @@ import { useParams } from 'react-router-dom';
 import { Popover } from '@headlessui/react';
 import Modal from '../../components/modal';
 import { useModal } from '../../hooks/useModal';
-import SelectInput from '../../components/selectInput';
-import Button from '../../components/button';
+
 import AboutMeForm from '../../components/profile/aboutMeForm';
+import EssaysForm from "../../components/profile/essaysForm";
 
 type Props = {};
 
 // PEXELS API KEY cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZgPEX
 
-const Profile = ({}: Props) => {
+const Profile = ({ }: Props) => {
   const { id } = useParams();
   const [user] = useUserStore((state) => [state.user]);
   const { data, isPending } = useQuery({
@@ -190,7 +190,11 @@ const Profile = ({}: Props) => {
           />
         </Modal>
         <Modal open={essayModalOpen} onClose={toggleEssayModal}>
-          <div className="p-5 bg-white"></div>
+          <EssaysForm
+            close={toggleEssayModal}
+            profile={data.data}
+            user_id={user.id}
+          />
         </Modal>
       </section>
     );
