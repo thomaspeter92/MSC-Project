@@ -1,25 +1,31 @@
 import { Router } from "express";
 import userController from "../controllers/user";
-import multer from 'multer'
+import multer from "multer";
 
-const upload = multer()
+const upload = multer();
 
 export const userRouter: Router = Router();
 
 userRouter.get("/all", userController.getAllUsers);
 
-userRouter.get('/:email', userController.getUser)
+userRouter.get("/:email", userController.getUser);
 
 // get user profile
-userRouter.get('/profile/:id', userController.getUserProfileById)
+userRouter.get("/profile/:id", userController.getUserProfileById);
 
 // create user
-userRouter.post('/signup', userController.handleSignUp)
+userRouter.post("/signup", userController.handleSignUp);
 
 // sign in
-userRouter.post('/signin', userController.handleSignIn)
+userRouter.post("/signin", userController.handleSignIn);
 
 // edit user
-userRouter.post('/updatePicture', upload.single('image'), userController.updateProfilePicture)
+userRouter.post(
+  "/updatePicture",
+  upload.single("image"),
+  userController.updateProfilePicture
+);
 
-userRouter.post('/updateAboutInfo', userController.updateAboutMe)
+userRouter.post("/updateAboutInfo", userController.updateAboutMe);
+
+userRouter.post("/updateEssays", userController.updateEssays);

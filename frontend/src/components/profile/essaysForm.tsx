@@ -3,8 +3,8 @@ import { useFormik } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import colors from 'tailwindcss/colors';
-import { updateEssays } from "../../services/userService";
-import TextArea from "../textArea";
+import { updateEssays } from '../../services/userService';
+import TextArea from '../textArea';
 
 type Props = {
   profile: any;
@@ -50,17 +50,73 @@ const EssaysForm = ({ profile, user_id, close }: Props) => {
   console.log(formik.values);
 
   return (
-    <form onSubmit={formik.handleSubmit} className="p-5 bg-white w-[75ch] max-w-[90vw] max-h-[90vh] overflow-scroll space-y-5">
-      <TextArea label="Self Summary" />
-      <TextArea label="What I'm doing with my life" />
-      <TextArea label="I'm really good at..." />
-      <TextArea label="The first thing people notice about me is..." />
-      <TextArea label="My favorite media is..." />
-      <TextArea label="The things I could never do without" />
-      <TextArea label="I spend a lot of time thinking about..." />
-      <TextArea label="On a typical Friday night I am..." />
-      <TextArea label="The most private thing I am willing to admit" />
-      <TextArea label="You should message me if..." />
+    <form
+      onSubmit={formik.handleSubmit}
+      className="p-5 bg-white w-[75ch] max-w-[90vw] max-h-[90vh] overflow-scroll space-y-5"
+    >
+      <TextArea
+        name="essay0"
+        onChange={formik.handleChange}
+        value={formik.values.essay0}
+        label="Self Summary"
+      />
+      <TextArea
+        name="essay1"
+        onChange={formik.handleChange}
+        value={formik.values.essay1}
+        label="What I'm doing with my life"
+      />
+      <TextArea
+        name="essay2"
+        onChange={formik.handleChange}
+        value={formik.values.essay2}
+        label="I'm really good at..."
+      />
+      <TextArea
+        name="essay3"
+        onChange={formik.handleChange}
+        value={formik.values.essay3}
+        label="The first thing people notice about me is..."
+      />
+      <TextArea
+        name="essay4"
+        onChange={formik.handleChange}
+        value={formik.values.essay4}
+        label="My favorite media is..."
+      />
+      <TextArea
+        name="essay5"
+        onChange={formik.handleChange}
+        value={formik.values.essay5}
+        label="The things I could never do without"
+      />
+      <TextArea
+        name="essay6"
+        onChange={formik.handleChange}
+        value={formik.values.essay6}
+        label="I spend a lot of time thinking about..."
+      />
+      <TextArea
+        name="essay7"
+        onChange={formik.handleChange}
+        value={formik.values.essay7}
+        label="On a typical Friday night I am..."
+      />
+      <TextArea
+        name="essay8"
+        onChange={formik.handleChange}
+        value={formik.values.essay8}
+        label="The most private thing I am willing to admit"
+      />
+      <TextArea
+        name="essay9"
+        onChange={formik.handleChange}
+        value={formik.values.essay9}
+        label="You should message me if..."
+      />
+      <Button type="submit" intent={'primary'} size={'lg'}>
+        Submit
+      </Button>
     </form>
   );
 };

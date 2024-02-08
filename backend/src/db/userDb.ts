@@ -68,6 +68,24 @@ class UserDb extends Db {
     return result.rows[0] || null;
   };
 
+  updateEssays = async (data: any) => {
+    let sql = `UPDATE "Profile" SET essay0=$1, essay1=$2, essay2=$3, essay3=$4, essay4=$5, essay5=$6, essay6=$7, essay7=$8, essay8=$9, essay9=$10 WHERE user_id = $11;`;
+    let result = await this.query(sql, [
+      data.essay0,
+      data.essay1,
+      data.essay2,
+      data.essay3,
+      data.essay4,
+      data.essay5,
+      data.essay6,
+      data.essay7,
+      data.essay8,
+      data.essay9,
+      data.id,
+    ]);
+    return result.rows[0] || null;
+  };
+
   getUnfinishedProfile = async (id: number) => {
     let sql = `SELECT id
     FROM "Profile"
