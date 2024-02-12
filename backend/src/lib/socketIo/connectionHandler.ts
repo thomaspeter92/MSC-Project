@@ -16,7 +16,6 @@ export const initSocketServer = (httpServer: any) => {
   // Authenticate users on initial handshake based on bearer token
   io.use(async (socket: any, next) => {
     const token = socket.handshake.auth.token
-
     try {
       const fbUser = await firebaseService.verifyToken(token)
       const dbUser = await userDb.getUserByEmail(fbUser.email as string)
@@ -29,8 +28,6 @@ export const initSocketServer = (httpServer: any) => {
 
   // Socket.IO connection handler
   io.on('connection', (socket: any) => {
-
-    console.log('User connected', socket.user)
 
     socket.on('join room', (roomId) => {
       socket.join(roomId)
