@@ -1,4 +1,3 @@
-import prisma from "../../db/prisma";
 import { NextFunction, Request, Response } from "express";
 import ErrorResponse from "../../utils/errorResponse";
 import respond from "../../utils/response";

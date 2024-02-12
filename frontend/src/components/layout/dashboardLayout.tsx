@@ -38,7 +38,7 @@ const MENU: Menu = [
   {
     title: 'Settings',
     href: '/settings',
-    icon: 'user',
+    icon: 'settings',
   },
 ];
 
@@ -52,10 +52,10 @@ const DashboardLayout = ({ children }: Props) => {
       {/* TOP BAR */}
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
         <h4 className="flex items-center gap-1">
-          <LoveIcon strokeWidth={3}size={18} className="text-rose-500"/>
+          <LoveIcon strokeWidth={3} size={18} className="text-rose-500" />
           Dating<span className="text-rose-500">Service</span></h4>
         <div className="flex items-center gap-5">
-          <Button  size="lg" icon="verify">Get Verified</Button>
+          <Button size="lg" icon="verify">Get Verified</Button>
           <Notification />
         </div>
       </nav>
@@ -93,7 +93,7 @@ const DashboardLayout = ({ children }: Props) => {
           </div>
         </aside>
         {/* CENTER COLUMN */}
-        <section className="flex-1 rounded-lg">{children}</section>
+        <section className="flex-1 rounded-lg h-full">{children}</section>
         {/* RIGHT COLUMN */}
         <section className="space-y-5 w-[300px] sticky top-0">
           <RecentChats />

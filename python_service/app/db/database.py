@@ -32,14 +32,20 @@ def fetch_profiles(user_id):
         
         with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
             query = '''
-            SELECT p.* FROM "Profile" p
-            JOIN "User" u ON p.user_id = u.id
-            WHERE (u.id = %s)
-            OR (u.id != %s AND u.sex = %s AND u.orientation = %s AND NOT EXISTS (
-                SELECT 1 FROM "Connections" c WHERE (c.initiator_id = u.id OR c.target_id = u.id)
-            ))
-            LIMIT 100'''
-            cur.execute(query, ( user_id, user_id,sex_to_search, orientation))
+                (SELECT p.* FROM "Profile" p
+                JOIN "User" u ON p.user_id = u.id
+                WHERE u.id = %s)
+    
+                UNION
+    
+                (SELECT p.* FROM "Profile" p
+                JOIN "User" u ON p.user_id = u.id
+                WHERE (u.id != %s AND u.sex = %s AND u.orientation = %s AND u.complete = true AND NOT EXISTS (
+                    SELECT 1 FROM "Connections" c WHERE (c.initiator_id = u.id OR c.target_id = u.id)
+                ))
+                ORDER BY p.id LIMIT 100)            
+            '''
+            cur.execute(query, (user_id, user_id, sex_to_search, orientation))
             profiles = cur.fetchall()
         return profiles
     finally:

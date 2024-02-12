@@ -12,20 +12,23 @@ datasource db {
 }
 
 model User {
-  id                 Int           @id @default(autoincrement())
-  first_name         String
-  last_name          String
-  email              String        @unique
-  created_at         DateTime      @default(now())
-  age                Int
-  verified           Boolean       @default(false)
-  sex                Sex
-  orientation        String?
-  picture            String?
-  Profile            Profile[]
-  init_connections   Connections[] @relation(name: "initiator")
-  target_connections Connections[] @relation(name: "target")
-  complete           Boolean?
+  id                  Int             @id @default(autoincrement())
+  first_name          String
+  last_name           String
+  email               String          @unique
+  created_at          DateTime        @default(now())
+  age                 Int
+  verified            Boolean         @default(false)
+  sex                 Sex
+  orientation         String?
+  picture             String?
+  Profile             Profile[]
+  init_connections    Connections[]   @relation(name: "initiator")
+  target_connections  Connections[]   @relation(name: "target")
+  complete            Boolean?
+  sender_messages     Messages[]      @relation(name: "sender")
+  conversations_user1 Conversations[] @relation(name: "user1")
+  conversations_user2 Conversations[] @relation(name: "user2")
 }
 
 enum Sex {
@@ -79,4 +82,25 @@ model Connections {
   target       User     @relation(name: "target", fields: [target_id], references: [id])
 
   @@unique([initiator_id, target_id])
+}
+
+model Conversations {
+  id         Int        @id @default(autoincrement())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now())
+  user1_id   Int
+  user2_id   Int
+  user1      User       @relation(name: "user1", fields: [user1_id], references: [id])
+  user2      User       @relation(name: "user2", fields: [user2_id], references: [id])
+  messages   Messages[] @relation(name: "conversation")
+}
+
+model Messages {
+  id              Int           @id @default(autoincrement())
+  conversation_id Int
+  conversation    Conversations @relation(name: "conversation", fields: [conversation_id], references: [id])
+  sender_id       Int
+  sender          User          @relation(name: "sender", fields: [sender_id], references: [id])
+  content         String
+  timestamp       DateTime      @default(now())
 }

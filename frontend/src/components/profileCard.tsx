@@ -3,6 +3,7 @@ import Button from './button';
 import { useMutation } from '@tanstack/react-query';
 import { registerConnection } from '../services/connectionsService';
 import { useQueryClient } from '@tanstack/react-query';
+import { Verified } from "lucide-react";
 
 type Props = {
   name: string;
@@ -15,6 +16,7 @@ type Props = {
   isConnection: boolean;
   userId: number;
   onProfileClick?: () => void;
+  verified?: boolean
 };
 
 const ProfileCard = ({
@@ -28,31 +30,33 @@ const ProfileCard = ({
   location,
   isConnection,
   onProfileClick,
+  verified
 }: Props) => {
   const queryClient = useQueryClient();
   const LocationIcon = Icons['location'];
   const RightIcon = Icons['right'];
   const UserIcon = Icons['user1']
+  const VerifiedIcon = Icons['checkCircle']
 
-
-  const connectMutation = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: registerConnection,
   });
 
   const handleConnect = () => {
-    connectMutation.mutate(
+    mutate(
       { id: userId, status: 'pending' },
       {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['connections'] });
-        },
+        onSuccess: () => Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['connections'] }),
+          queryClient.invalidateQueries({ queryKey: ['recent-connections'] })
+        ])
       }
     );
   };
 
   const handleDelete = () => {
     // Here, save the connection as BLOCKED.
-    connectMutation.mutate(
+    mutate(
       { id: userId, status: 'blocked' },
       {
         onSuccess: () => {
@@ -63,20 +67,26 @@ const ProfileCard = ({
   };
 
 
-
-
   return (
-    <div className="bg-white p-5 rounded-xl flex flex-col xl:flex-row gap-5">
-      <div className="bg-gray-100 min-w-[200px] h-[200px]  xl:h-auto  relative rounded-lg overflow-hidden flex justify-center items-center">
+    <div className="bg-white rounded-xl flex flex-col xl:flex-row shadow-main">
+      <div className="bg-rose-100 min-w-[220px] h-full  xl:h-auto  relative flex justify-center items-center rounded-tl-xl rounded-bl-xl">
         {image ? <img
           loading="lazy"
-          className="object-cover w-full h-full top-0 left-0 absolute"
+          className="object-cover w-full h-full top-0 left-0 absolute rounded-tl-xl rounded-bl-xl"
           src={image}
         /> :
-          <UserIcon size={100} className="text-rose-200" />
+          <UserIcon size={100} className="text-rose-300" />
         }
+        {verified ?
+          <div className="flex items-center gap-2 top-full -translate-x-1/2 -translate-y-1/2 left-1/2  px-5 py-1 -skew-x-12 rounded-lg bg-gradient-to-r from-blue-500 to-sky-400 absolute text-white capitalize font-semibold">
+            <VerifiedIcon size={20} />
+            <p>
+              Verified
+            </p>
+          </div>
+          : null}
       </div>
-      <div className="">
+      <div className="p-5">
         <h5 className="capitalize">
           {name}, {age}
         </h5>
@@ -128,10 +138,11 @@ const ProfileCard = ({
               See More about {name} <RightIcon size={20} />
             </button>
             <div className="flex gap-5">
-              <Button onClick={handleDelete} intent={'gray'} size={'lg'}>
+              <Button loading={isPending} onClick={handleDelete} intent={'gray'} size={'lg'}>
                 Delete
               </Button>
               <Button
+                loading={isPending}
                 onClick={handleConnect}
                 size={'lg'}
                 icon="connect"

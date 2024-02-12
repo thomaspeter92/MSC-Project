@@ -19,7 +19,8 @@ import {
   ChevronsUpDown,
   FileUp,
   Pencil,
-  User
+  User,
+  SendHorizonal,
 } from 'lucide-react';
 
 export const Icons = {
@@ -45,4 +46,5 @@ export const Icons = {
   ellipsis: MoreHorizontal,
   pencil: Pencil,
   user1: User,
+  send: SendHorizonal
 };

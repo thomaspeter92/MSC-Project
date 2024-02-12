@@ -16,16 +16,9 @@ const ProfilePreview = ({ userId }: Props) => {
 
   console.log(data)
   return (
-    <div className="">
+    <div className="overflow-scroll h-full">
       <h5>About Me</h5>
       <div className="flex flex-wrap items-center space-y-1 capitalize border-b pb-5">
-        {/* GENDER */}
-        <div className="w-1/2 flex items-center">
-          <p className=" text-gray-500 text-sm w-24">Gender</p>
-          <p className="font-semibold">
-            {data.data.sex === 'm' ? 'Male' : 'Female'}
-          </p>
-        </div>
         {/* SMOKES */}
         <div className="w-1/2 flex items-center">
           <p className=" text-gray-500 text-sm w-24">Smokes</p>
@@ -60,6 +53,11 @@ const ProfilePreview = ({ userId }: Props) => {
         <div className="w-1/2 flex items-center">
           <p className=" text-gray-500 text-sm w-24">Children</p>
           <p className="font-semibold">{data.data.offspring || '?'}</p>
+        </div>
+        {/* CHILDREN */}
+        <div className="w-1/2 flex items-center">
+          <p className=" text-gray-500 text-sm w-24">Body Type</p>
+          <p className="font-semibold">{data.data?.body_type || '?'}</p>
         </div>
       </div>
       <div className="mt-2 grid md:grid-cols-2 gap-3">

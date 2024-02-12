@@ -11,6 +11,7 @@ import { useModal } from '../../hooks/useModal';
 
 import AboutMeForm from '../../components/profile/aboutMeForm';
 import EssaysForm from "../../components/profile/essaysForm";
+import LoadingSpinner from "../../components/loadingSpinner";
 
 type Props = {};
 
@@ -19,7 +20,7 @@ type Props = {};
 const Profile = ({ }: Props) => {
   const { id } = useParams();
   const [user] = useUserStore((state) => [state.user]);
-  const { data, isPending } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['profile', id ? id : user.id],
     queryFn: () => getUserProfile(id ? id : user.id),
   });
@@ -35,10 +36,21 @@ const Profile = ({ }: Props) => {
 
   const userInfo = data?.data;
 
-  if (userInfo && !isPending) {
+  console.log(user)
+
+  if (isFetching) {
     return (
-      <section className="space-y-5">
+      <div className="w-full h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    )
+  }
+
+  if (userInfo && !isFetching) {
+    return (
+      <section className="space-y-8">
         <ProfileCard
+          verified={userInfo.verified}
           userId={userInfo.id}
           name={userInfo.first_name}
           bio={userInfo.bio}

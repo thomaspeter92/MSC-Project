@@ -53,24 +53,27 @@ const Connections = ({ }: Props) => {
         {!user.complete ?
           <p>Please <Link to="/profile" className="font-bold text-rose-400">complete your profile</Link> to begin making connections. Your profile data is needed to help find you the perfect match.</p>
           : null}
-        {users?.data?.map((d: any) => (
-          <ProfileCard
-            key={d.id}
-            userId={d.id}
-            name={d.first_name}
-            age={d.age}
-            location={d.location}
-            image={d?.picture}
-            likes={d.likes}
-            dislikes={d.dislikes}
-            bio={d.bio}
-            isConnection
-            onProfileClick={() => handleExpand(d.id)}
-          />
-        ))}
+        {users?.data?.length > 0 ?
+          users?.data?.map((d: any) => (
+            <ProfileCard
+              key={d.id}
+              userId={d.id}
+              name={d.first_name}
+              age={d.age}
+              location={d.location}
+              image={d?.picture}
+              likes={d.likes}
+              dislikes={d.dislikes}
+              bio={d.bio}
+              isConnection
+              onProfileClick={() => handleExpand(d.id)}
+            />
+          ))
+          : <p>No more connections available, please check back tomorrow.</p>
+        }
       </div>
       <Modal
-        className="w-[150ch] overflow-y-scroll"
+        className="w-[150ch] max-h-[95vh] overflow-y-scroll"
         open={open}
         onClose={toggleModal}
       >
