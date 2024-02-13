@@ -1,5 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import React from 'react'
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import { getConversationById, sendMessage } from "../../../services/messagingService"
 import LoadingSpinner from "../../../components/loadingSpinner"
@@ -9,7 +8,7 @@ import { Icons } from "../../../components/icons"
 import { useFormik } from "formik"
 import { useEffect } from "react"
 import { useUserStore } from "../../../stores/userStore"
-// import { socketEventManager } from "../../../services/socketsService"
+import socketEventManager from "../../../services/socketsService"
 
 type Props = {}
 
@@ -30,8 +29,7 @@ const FullMessage = (props: Props) => {
       message: '',
     },
     onSubmit: (values) => {
-      console.log('hello')
-      // socketEventManager.sendMessage(values.message)
+      socketEventManager.sendMessage(id + "", values.message)
     }
   })
 
@@ -41,10 +39,10 @@ const FullMessage = (props: Props) => {
       console.log(message)
     }
     // Subscribe to message events
-    // const unsubscribe = socketEventManager.subscribeToMessages(handleMessage);
+    const unsubscribe = socketEventManager.subscribeToMessages(handleMessage);
     // Clean up by unsubscribing from the event when the component unmounts
     return () => {
-      // unsubscribe();
+      unsubscribe();
     };
   }, [])
 

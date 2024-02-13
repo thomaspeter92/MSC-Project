@@ -26,7 +26,7 @@ class UserDb extends Db {
   };
 
   createUser = async (data: any) => {
-    let sql = `INSERT INTO "User" (email, first_name, last_name, age, sex, orientation, verified) VALUES ($1, $2, $3, $4, $5, $6, false) RETURNING id;`;
+    let sql = `INSERT INTO "User" (email, first_name, last_name, age, sex, orientation, verified, complete) VALUES ($1, $2, $3, $4, $5, $6, false, false) RETURNING id;`;
     let result = await this.query(sql, [
       data.email,
       data.first_name,

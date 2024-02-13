@@ -17,9 +17,9 @@ const Connections = ({ }: Props) => {
   const { open, toggleModal } = useModal(false);
   const [expanded, setExpanded] = useState(0);
   const [user] = useUserStore((state) => [state.user]);
-  console.log(user)
 
   const HeartIcon = Icons['heart'];
+
 
   const { data: users, isFetching } = useQuery({
     queryKey: ['connections', user.email],

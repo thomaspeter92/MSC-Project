@@ -1,6 +1,11 @@
 import api from "./api";
 
 
+export const initChat = async (recipient_id: number) => {
+  return api.post('/messages/initChat', { recipient_id: recipient_id })
+}
+
+
 export const getAllMessages = async () => {
   return api.get('/messages/getMessages')
 }

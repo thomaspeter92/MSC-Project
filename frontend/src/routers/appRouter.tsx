@@ -10,8 +10,8 @@ import { getUser } from '../services/userService';
 import { useUserStore } from '../stores/userStore';
 import FullMessage from "../pages/Messages/FullMessage";
 import { useEffect } from "react";
-import SocketEventManager from "../services/socketsService";
-
+import { getUserToken } from "../services/firebaseService";
+import socketEventManager from '../services/socketsService'
 type Props = {};
 
 const AppRouter = ({ }: Props) => {
@@ -23,13 +23,19 @@ const AppRouter = ({ }: Props) => {
     refetchOnWindowFocus: false,
   });
 
+  // Example component or application initialization logic
   useEffect(() => {
-    const initChat = async () => {
-      const socketEventManager = new SocketEventManager();
-      await socketEventManager.initSocket()
-    }
-    initChat()
-  }, [])
+    const initializeSockets = async () => {
+      const token = await getUserToken();
+      if (token) {
+        await socketEventManager.initSocket(token);
+        // Optionally, listen for messages globally, manage state, notifications, etc.
+      }
+    };
+
+    initializeSockets();
+  }, []); // Run once on app/component load
+
 
   return (
     <DashboardLayout>

@@ -2,9 +2,9 @@ import { Server } from "socket.io"
 import firebaseService from "../firebase/firebaseService"
 import ErrorResponse from "../../utils/errorResponse"
 import userDb from "../../db/userDb"
+import messagesDb from "../../db/messagesDb"
 
 export const initSocketServer = (httpServer: any) => {
-
   // Init Scoket.io for the chat feature
   const io = new Server(httpServer, {
     cors: {
@@ -27,14 +27,24 @@ export const initSocketServer = (httpServer: any) => {
   })
 
   // Socket.IO connection handler
-  io.on('connection', (socket: any) => {
+  io.on('connection', async (socket: any) => {
+    // Automatically join user to their conversation rooms
+    try {
+      const conversations = await messagesDb.getConversationsByUserId(socket.user.id);
+      conversations.forEach((conv: any) => {
+        socket.join(conv.id.toString()); // Ensure room ID is a string
+      });
+    } catch (error) {
+      console.error('Error joining conversation rooms:', error);
+    }
 
-    socket.on('join room', (roomId) => {
+
+    socket.on('join room', (roomId: number) => {
       socket.join(roomId)
     })
 
     // Example: Listen for chat messages
-    socket.on('chat message', (msg) => {
+    socket.on('chat message', (msg: string) => {
       console.log('message: ' + msg);
       // You can emit back to all clients, specific clients, or rooms
       io.emit('chat message', msg);

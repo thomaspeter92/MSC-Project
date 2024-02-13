@@ -14,3 +14,6 @@ messagesRouter.get("/getMessages", messagesController.getMessages);
 
 // Get a list of all my recent conversations
 messagesRouter.post("/getConversationById", messagesController.getConversationById);
+
+
+messagesRouter.post('/initChat', messagesController.initChat)

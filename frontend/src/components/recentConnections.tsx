@@ -1,18 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getUserProfile } from '../services/userService';
 import { Icons } from './icons';
 import { getRecentConnections } from '../services/connectionsService';
+import { initChat } from "../services/messagingService";
 
 type Props = {};
 
 const RecentConnections = ({ }: Props) => {
-  const { data, isPending, error } = useQuery({
+  const { mutate, isPending } = useMutation({ mutationFn: initChat })
+
+  const { data, isFetching, error } = useQuery({
     queryKey: ['recent-connections'],
     queryFn: getRecentConnections,
   });
 
+  // click, init chat, direct to chat
+  const handleClick = (user_id: number) => {
+    if (!isPending) {
+      mutate(user_id, {
+        onSuccess: () => { }
+      })
+    }
+  }
+
   const UserIcon = Icons['user'];
-  if (!isPending && !error) {
+  if (!isFetching && !error) {
     return (
       <div className="p-5 rounded-xl bg-white">
         <h6 className="mb-3">Recent Connections</h6>
@@ -20,7 +32,7 @@ const RecentConnections = ({ }: Props) => {
           {data.data?.length > 0
             ? data?.data?.map((d: any) => (
               <div
-                // onClick={} // LINK TO PROFILE OR CHAT?
+                onClick={() => handleClick(d.id)} // LINK TO PROFILE OR CHAT?
                 key={d.id}
                 className="flex flex-col items-center"
               >

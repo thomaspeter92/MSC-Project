@@ -66,6 +66,12 @@ class MessagesDb extends Db {
     return result.rows || null
   }
 
+  getConversationsByUserId = async (user_id: number) => {
+    let sql = `SELECT * FROM "Conversations" WHERE user1_id = 7813 OR user2_id = $1;`
+    let result = await this.query(sql, [user_id])
+    return result.rows || null
+  }
+
 }
 
 export default new MessagesDb();

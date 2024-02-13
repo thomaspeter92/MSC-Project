@@ -1,16 +1,17 @@
 import io from 'socket.io-client';
-import { getUserToken } from "./firebaseService";
-
 
 type MessageHandler = (message: string) => void;
 
 class SocketEventManager {
-  private socket: any;
+  private socket: ReturnType<typeof io> | null = null; // More accurate typing
   private messageHandlers: MessageHandler[] = [];
 
-  async initSocket() {
-    const token = await getUserToken(); // Ensure this is awaited before proceeding
-    console.log(token)
+  constructor() {
+    // Constructor remains empty, socket initialization is done via initSocket
+  }
+
+  async initSocket(token: string) {
+    console.log('INIT SOCKETS');
     this.socket = io('http://localhost:8080', {
       auth: {
         token: token, // Use the token directly
@@ -18,15 +19,16 @@ class SocketEventManager {
     });
 
     this.socket.on('connect_error', (err: any) => {
-      console.log('Socket.IO connect_error:', err.message); // Log connection errors
+      console.log('Socket.IO connect_error:', err.message); // Useful for debugging
     });
 
     // Register the global event listener within the async function after the socket is initialized
     this.socket.on('chat message', (message: string) => {
+      console.log(message)
       this.messageHandlers.forEach(handler => handler(message));
     });
   }
-  // Adjust the subscribeToMessages and sendMessage methods to use this.socket
+
   subscribeToMessages(handler: MessageHandler) {
     this.messageHandlers.push(handler);
     return () => {
@@ -34,14 +36,23 @@ class SocketEventManager {
     };
   }
 
-  sendMessage(message: string) {
+  // Ensure joinConversationRoom doesn't reinitialize the socket with a new token
+  joinConversationRoom(conversationId: string) {
     if (this.socket) {
-      this.socket.emit('chat message', message);
+      this.socket.emit('join room', conversationId);
+    } else {
+      console.error('Socket not initialized or token not set');
+    }
+  }
+
+  sendMessage(conversationId: string, message: string) {
+    if (this.socket) {
+      // Modify to include conversationId when emitting a message
+      this.socket.emit('chat message', { conversationId, message });
     } else {
       console.error('Socket not initialized');
     }
   }
 }
 
-// Export an instance of the manager
-export default SocketEventManager;
+export default new SocketEventManager();
