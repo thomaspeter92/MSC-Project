@@ -1,62 +1,75 @@
-import { Server } from "socket.io"
-import firebaseService from "../firebase/firebaseService"
-import ErrorResponse from "../../utils/errorResponse"
-import userDb from "../../db/userDb"
-import messagesDb from "../../db/messagesDb"
+import { Server } from "socket.io";
+import firebaseService from "../firebase/firebaseService";
+import ErrorResponse from "../../utils/errorResponse";
+import userDb from "../../db/userDb";
+import messagesDb from "../../db/messagesDb";
 
 export const initSocketServer = (httpServer: any) => {
   // Init Scoket.io for the chat feature
   const io = new Server(httpServer, {
     cors: {
       origin: "*",
-      methods: ['GET', 'POST']
-    }
-  })
+      methods: ["GET", "POST"],
+    },
+  });
 
   // Authenticate users on initial handshake based on bearer token
   io.use(async (socket: any, next) => {
-    const token = socket.handshake.auth.token
+    const token = socket.handshake.auth.token;
     try {
-      const fbUser = await firebaseService.verifyToken(token)
-      const dbUser = await userDb.getUserByEmail(fbUser.email as string)
+      const fbUser = await firebaseService.verifyToken(token);
+      const dbUser = await userDb.getUserByEmail(fbUser.email as string);
       socket.user = dbUser;
-      next()
+      next();
     } catch (error) {
-      next(new ErrorResponse(401, 1, 'Unauthorsied'))
+      next(new ErrorResponse(401, 1, "Unauthorsied"));
     }
-  })
+  });
 
-  // Socket.IO connection handler
-  io.on('connection', async (socket: any) => {
-    // Automatically join user to their conversation rooms
+  // SOCKET CONNECTION HANDLER
+  // Automatically join user to their conversation rooms
+  io.on("connection", async (socket: any) => {
     try {
-      const conversations = await messagesDb.getConversationsByUserId(socket.user.id);
+      const conversations = await messagesDb.getConversationsByUserId(
+        socket.user.id
+      );
       conversations.forEach((conv: any) => {
         socket.join(conv.id.toString()); // Ensure room ID is a string
       });
     } catch (error) {
-      console.error('Error joining conversation rooms:', error);
+      console.error("Error joining conversation rooms:", error);
     }
 
-
-    socket.on('join room', (roomId: number) => {
-      socket.join(roomId)
-    })
-
-    // Example: Listen for chat messages
-    socket.on('chat message', (msg: string) => {
-      console.log('message: ' + msg);
-      // You can emit back to all clients, specific clients, or rooms
-      io.emit('chat message', msg);
+    socket.on("join room", (roomId: number) => {
+      socket.join(roomId);
     });
 
-    socket.on('disconnect', () => {
-      console.log('User disconnected');
+    // MESSAGE HANDLER
+    socket.on(
+      "chat message",
+      async ({
+        message,
+        conversationId,
+      }: {
+        message: string;
+        conversationId: number;
+      }) => {
+        io.to(conversationId + "").emit("chat message", {
+          content: message,
+          sender_id: socket.user.id,
+          timestamp: new Date(),
+          id: conversationId,
+        });
+        await messagesDb.createMessage({
+          conversation_id: conversationId,
+          sender_id: socket.user.id,
+          content: message,
+        });
+      }
+    );
+
+    socket.on("disconnect", () => {
+      console.log("User disconnected");
     });
   });
-
-}
-
-// 1 - message starts between two users
-// 2 - entry is made into the Conversations table
-// 3 - message is saved into the Messages table along with the conversation_id.
+};

@@ -11,15 +11,15 @@ import 'react-toastify/dist/ReactToastify.css';
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <div className="min-h-screen bg-neutral-100">
-          <App />
-          <ToastContainer position="bottom-center" />
-        </div>
-      </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <div className="min-h-screen bg-neutral-100">
+        <App />
+        <ToastContainer position="bottom-center" />
+      </div>
+    </BrowserRouter>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
+  // </React.StrictMode>
 );

@@ -24,15 +24,14 @@ class SocketEventManager {
 
     // Register the global event listener within the async function after the socket is initialized
     this.socket.on('chat message', (message: string) => {
-      console.log(message)
-      this.messageHandlers.forEach(handler => handler(message));
+      this.messageHandlers.forEach((handler) => handler(message));
     });
   }
 
   subscribeToMessages(handler: MessageHandler) {
     this.messageHandlers.push(handler);
     return () => {
-      this.messageHandlers = this.messageHandlers.filter(h => h !== handler);
+      this.messageHandlers = this.messageHandlers.filter((h) => h !== handler);
     };
   }
 
