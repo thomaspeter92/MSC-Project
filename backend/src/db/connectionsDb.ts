@@ -4,7 +4,7 @@ class ConnectionsDb extends Db {
   // get the user id
   //  pull records where initiator id or target id is === users id & status === active
 
-  getConnections = async (user_id: number, limit: number = 100) => {
+  getConnections = async (user_id: number, limit: number = 1_000_000) => {
     let sql = `SELECT u.id, u.first_name, u.picture FROM "Connections" c INNER JOIN "User" u ON c.initiator_id = u.id WHERE c.target_id = $1 AND c.status = 'active'
     UNION
     SELECT u.id, u.first_name, u.picture FROM "Connections" c INNER JOIN "User" u ON c.target_id = u.id WHERE c.initiator_id = $1 AND c.status = 'active' LIMIT $2;`;

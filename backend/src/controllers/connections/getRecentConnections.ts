@@ -6,7 +6,7 @@ import respond from "../../utils/response";
 import userDb from "../../db/userDb";
 import ErrorResponse from "../../utils/errorResponse";
 import connectionsDb from "../../db/connectionsDb";
-const getRecentConnections = async (
+const getConnectionsList = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -19,7 +19,10 @@ const getRecentConnections = async (
     if (!fbUser) return next(new ErrorResponse(404, 11, "No user found"));
 
     const dbUser = await userDb.getUserByEmail(fbUser.email as string);
-    const dbConnections = await connectionsDb.getConnections(dbUser.id, 10);
+
+    const limit = Number(req.query.limit);
+
+    const dbConnections = await connectionsDb.getConnections(dbUser.id, limit);
 
     respond(res, "success", dbConnections);
   } catch (error) {
@@ -27,4 +30,4 @@ const getRecentConnections = async (
   }
 };
 
-export default getRecentConnections;
+export default getConnectionsList;

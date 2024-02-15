@@ -9,12 +9,14 @@ import { useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useUserStore } from '../../../stores/userStore';
 import socketEventManager from '../../../services/socketsService';
+import { useChatStore } from '../../../stores/chatStore';
 
 type Props = {};
 
 const FullMessage = ({}: Props) => {
   const SendIcon = Icons['send'];
   const [user] = useUserStore((state) => [state.user]);
+  const [markChatAsRead] = useChatStore((state) => [state.markChatAsRead]);
   const [newMessages, setNewMessages] = useState<string[]>([]);
   const { id } = useParams();
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -58,6 +60,8 @@ const FullMessage = ({}: Props) => {
   useEffect(() => {
     // whenever backend data is refreshed, remove new messages (theyll come from backend)
     setNewMessages([]);
+    // when this chst is opened, remove from unread messages to get rid of notification
+    markChatAsRead(id + '');
   }, [data]);
 
   return (

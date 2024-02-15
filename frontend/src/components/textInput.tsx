@@ -1,23 +1,24 @@
-import { cva } from "class-variance-authority";
-import { Icons } from "./icons";
-import { cn } from "../lib/utils";
+import { cva } from 'class-variance-authority';
+import { Icons } from './icons';
+import { cn } from '../lib/utils';
 
 const InputStyles = cva(
-  "py-4 px-4 bg-rose-100 w-full rounded placeholder:text-rose-400 focus:outline-rose-500",
+  'py-4 px-4 bg-rose-100 w-full rounded placeholder:text-rose-400 focus:outline-rose-500',
   {
     variants: {
       size: {
-        md: "w-full",
+        md: '',
+        sm: 'px-4 py-2',
       },
     },
-  },
+  }
 );
 
 type Props = {
   type: string;
   onChange: (event: React.ChangeEvent) => void;
   placeholder: string;
-  size?: "md";
+  size?: 'md' | 'sm';
   icon?: keyof typeof Icons;
   error?: string | boolean;
   value: string;
@@ -25,27 +26,32 @@ type Props = {
   label?: string;
   min?: string;
   max?: string;
+  className?: string;
 };
 
 const TextInput = ({
   type,
   onChange,
   placeholder,
-  size = "md",
+  size = 'md',
   icon,
   error,
   value,
   name,
   label,
-  min, max
+  min,
+  max,
+  className,
 }: Props) => {
   const Icon = Icons[icon as keyof typeof Icons];
-  const ErrorIcon = Icons["alertCircle"];
+  const ErrorIcon = Icons['alertCircle'];
   return (
     <div className="w-full">
-      {label ?
-        <label className="text-rose-400 text-sm font-semibold block mb-1">{label}</label>
-        : null}
+      {label ? (
+        <label className="text-rose-400 text-sm font-semibold block mb-1">
+          {label}
+        </label>
+      ) : null}
       <div className="relative">
         {icon ? (
           <Icon
@@ -60,8 +66,9 @@ const TextInput = ({
           onChange={onChange}
           className={cn(
             InputStyles({ size }),
-            icon ? "pl-9" : "",
-            error ? "border border-red-500 bg-red-100" : "",
+            icon ? 'pl-9' : '',
+            error ? 'border border-red-500 bg-red-100' : '',
+            className
           )}
           placeholder={placeholder}
           min={min}

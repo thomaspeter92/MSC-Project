@@ -1,11 +1,11 @@
 import getConnections from "./getConnections";
-import getRecentConnections from "./getRecentConnections";
+import getConnectionsList from "./getRecentConnections";
 import makeConnection from "./makeConnection";
 
 const connectionsController = {
   getConnections,
   makeConnection,
-  getRecentConnections,
+  getConnectionsList,
 };
 
 export default connectionsController;

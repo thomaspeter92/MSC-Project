@@ -1,8 +1,14 @@
 import { create } from 'zustand';
 
-export const useChatStore = create((set: any, get: any) => ({
+type ChatStore = {
+  unreadChats: { [key: number]: boolean };
+  addToUnread: (message_id: string) => void;
+  markChatAsRead: (message_id: string) => void;
+};
+
+export const useChatStore = create<ChatStore>((set) => ({
   unreadChats: {},
-  addToUnread: (message_id: string) =>
+  addToUnread: (message_id) =>
     set((state: any) => {
       return {
         unreadChats: {
@@ -12,7 +18,7 @@ export const useChatStore = create((set: any, get: any) => ({
       };
     }),
 
-  markChatAsRead: (message_id: number) =>
+  markChatAsRead: (message_id) =>
     set((state: any) => ({
       unreadChats: {
         ...state.unreadChats,

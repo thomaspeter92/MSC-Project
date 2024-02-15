@@ -10,8 +10,8 @@ connectionsRouter.post("/makeConnection", connectionsController.makeConnection);
 
 // list recent connections
 connectionsRouter.get(
-  "/getRecentConnections",
-  connectionsController.getRecentConnections
+  "/getConnectionsList",
+  connectionsController.getConnectionsList
 );
 
 // handle connection (approve/decline)

@@ -8,13 +8,14 @@ import Settings from '../pages/Settings';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '../services/userService';
 import { useUserStore } from '../stores/userStore';
-import FullMessage from "../pages/Messages/FullMessage";
-import { useEffect } from "react";
-import { getUserToken } from "../services/firebaseService";
-import socketEventManager from '../services/socketsService'
+import FullMessage from '../pages/Messages/FullMessage';
+import { useEffect } from 'react';
+import { getUserToken } from '../services/firebaseService';
+import socketEventManager from '../services/socketsService';
+import AllConnections from '../pages/AllConnections';
 type Props = {};
 
-const AppRouter = ({ }: Props) => {
+const AppRouter = ({}: Props) => {
   const [user] = useUserStore((state) => [state.user]);
 
   useQuery({
@@ -36,13 +37,13 @@ const AppRouter = ({ }: Props) => {
     initializeSockets();
   }, []); // Run once on app/component load
 
-
   return (
     <DashboardLayout>
       <Routes>
         <Route element={<Dashboard />} path="/" />
         <Route element={<Profile />} path="/profile/:id" />
         <Route element={<Profile />} path="/profile" />
+        <Route element={<AllConnections />} path="/connections/all" />
         <Route element={<Connections />} path="/connections" />
         <Route element={<Settings />} path="/settings" />
         <Route element={<FullMessage />} path="/messages/:id" />
