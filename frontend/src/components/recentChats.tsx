@@ -3,7 +3,7 @@ import { getAllMessages } from '../services/messagingService';
 import { Icons } from './icons';
 import { cn, formatDate } from '../lib/utils';
 import { Link, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import socketEventManager from '../services/socketsService';
 import { useQueryClient } from '@tanstack/react-query';
 import { useChatStore } from '../stores/chatStore';
@@ -19,12 +19,12 @@ const RecentChats = ({}: Props) => {
     queryKey: ['messages'],
     queryFn: getAllMessages,
   });
-
   const [unreadChats, addToUnread] = useChatStore((state) => [
     state.unreadChats,
     state.addToUnread,
   ]);
   const queryClient = useQueryClient();
+  const currentPath = useRef(location.pathname);
 
   // filter out chats with no message content (convo init but didnt send messge yet)
   const chats = data?.data?.filter((d: any) => d.last_message_content !== null);
@@ -32,12 +32,10 @@ const RecentChats = ({}: Props) => {
   const handleMessage = (message: any) => {
     queryClient.invalidateQueries({ queryKey: ['messages'] });
     // Here, check that the message isnt open and provide some kind of notifcation
-    if (location.pathname !== '/messages/' + message.id) {
-      // add to unread array in store
-      // remove from the read array when that message opens
-      console.log(message);
-      addToUnread(message.id);
-    }
+    if (currentPath.current === '/messages/' + message.id) return;
+    // add to unread array in store
+    // remove from the read array when that message opens
+    addToUnread(message.id);
   };
 
   useEffect(() => {
@@ -48,6 +46,10 @@ const RecentChats = ({}: Props) => {
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    currentPath.current = location.pathname;
+  }, [location.pathname]);
 
   return (
     <div className="bg-white rounded-xl p-5">
@@ -89,7 +91,7 @@ const RecentChats = ({}: Props) => {
                 <p
                   className={cn(
                     '',
-                    unreadChats[data.id]
+                    unreadChats[data.id] === true
                       ? 'font-bold text-rose-400'
                       : 'text-gray-500'
                   )}

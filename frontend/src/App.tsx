@@ -1,10 +1,8 @@
-import "./App.css";
-import AuthRouter from "./routers/authRouter";
-import { useEffect, useState } from "react";
-import AppRouter from "./routers/appRouter";
-import { useUserStore } from "./stores/userStore";
-import { getCurrentUser } from "./services/firebaseService";
-import LoadingSpinner from "./components/loadingSpinner";
+import './App.css';
+import AuthRouter from './routers/authRouter';
+import AppRouter from './routers/appRouter';
+import { useUserStore } from './stores/userStore';
+import LoadingSpinner from './components/loadingSpinner';
 
 function App() {
   // This should be a global state (zustand)

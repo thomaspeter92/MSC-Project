@@ -4,7 +4,6 @@ import { useLocation, Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import Notification from '../notification';
 import Button from '../button';
-import TextInput from '../textInput';
 import RecentChats from '../recentChats';
 import RecentConnections from '../recentConnections';
 import { useUserStore } from '../../stores/userStore';
@@ -21,9 +20,9 @@ type Menu = {
 
 const MENU: Menu = [
   {
-    title: 'My Profile',
-    href: '/profile',
-    icon: 'user',
+    title: 'New Suggestions',
+    href: '/connections',
+    icon: 'connect',
   },
   {
     title: 'Messages',
@@ -32,8 +31,13 @@ const MENU: Menu = [
   },
   {
     title: 'Connections',
-    href: '/connections',
+    href: '/connections/all',
     icon: 'heart',
+  },
+  {
+    title: 'My Profile',
+    href: '/profile',
+    icon: 'user',
   },
   {
     title: 'Settings',
@@ -45,7 +49,7 @@ const MENU: Menu = [
 const DashboardLayout = ({ children }: Props) => {
   const [signOut] = useUserStore((state) => [state.signOut]);
   const SignOutIcon = Icons['signOut'];
-  const LoveIcon = Icons['heart']
+  const LoveIcon = Icons['heart'];
   const location = useLocation();
   return (
     <div className="flex flex-col m-auto p-5 px-20 h-screen max-w-[1800px]">
@@ -53,9 +57,12 @@ const DashboardLayout = ({ children }: Props) => {
       <nav className="w-full p-5 bg-white shadow-main rounded-xl flex items-center justify-between">
         <h4 className="flex items-center gap-1">
           <LoveIcon strokeWidth={3} size={18} className="text-rose-500" />
-          Dating<span className="text-rose-500">Service</span></h4>
+          Dating<span className="text-rose-500">Service</span>
+        </h4>
         <div className="flex items-center gap-5">
-          <Button size="lg" icon="verify">Get Verified</Button>
+          <Button size="lg" icon="verify">
+            Get Verified
+          </Button>
           <Notification />
         </div>
       </nav>
