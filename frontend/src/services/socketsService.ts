@@ -7,7 +7,7 @@ class SocketEventManager {
   private messageHandlers: MessageHandler[] = [];
 
   constructor() {
-    // Constructor remains empty, socket initialization is done via initSocket
+
   }
 
   async initSocket(token: string) {
@@ -19,7 +19,7 @@ class SocketEventManager {
     });
 
     this.socket.on('connect_error', (err: any) => {
-      console.log('Socket.IO connect_error:', err.message); // Useful for debugging
+      console.log('Socket.IO connect_error:', err.message);
     });
 
     // Register the global event listener within the async function after the socket is initialized
