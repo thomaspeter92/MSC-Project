@@ -10,21 +10,21 @@ import Modal from '../../components/modal';
 import { useModal } from '../../hooks/useModal';
 
 import AboutMeForm from '../../components/profile/aboutMeForm';
-import EssaysForm from "../../components/profile/essaysForm";
-import LoadingSpinner from "../../components/loadingSpinner";
+import EssaysForm from '../../components/profile/essaysForm';
+import LoadingSpinner from '../../components/loadingSpinner';
 
 type Props = {};
 
 // PEXELS API KEY cVwTkwpovfH10DvMh0GTfNxcqNJXHpNfkwvARx8D3dpibaxHAm7z8xZgPEX
 
-const Profile = ({ }: Props) => {
+const Profile = ({}: Props) => {
   const { id } = useParams();
   const [user] = useUserStore((state) => [state.user]);
   const { data, isFetching } = useQuery({
     queryKey: ['profile', id ? id : user.id],
     queryFn: () => getUserProfile(id ? id : user.id),
   });
-  const [showAdditional, setShowAdditional] = useState<boolean>(false);
+  const [showAdditional, setShowAdditional] = useState<boolean>(true);
   const { open: aboutModalOpen, toggleModal: toggleAboutModal } =
     useModal(false);
   const { open: essayModalOpen, toggleModal: toggleEssayModal } =
@@ -36,14 +36,14 @@ const Profile = ({ }: Props) => {
 
   const userInfo = data?.data;
 
-  console.log(user)
+  console.log(user);
 
   if (isFetching) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <LoadingSpinner />
       </div>
-    )
+    );
   }
 
   if (userInfo && !isFetching) {
@@ -64,23 +64,25 @@ const Profile = ({ }: Props) => {
         <div className="bg-white rounded-xl p-5 mb-5 ">
           <div className="w-full flex justify-between">
             <h5>About Me</h5>
-            <Popover className="relative">
-              <Popover.Button>
-                <MoreIcon
-                  size={30}
-                  className="text-rose-500 hover:text-rose-300"
-                />
-              </Popover.Button>
-              <Popover.Panel className="absolute top-full right-0 bg-white shadow-main border border-gray-100 rounded">
-                <button
-                  onClick={toggleAboutModal}
-                  className="text-rose-500 whitespace-nowrap p-3 flex items-center gap-2 hover:bg-rose-100"
-                >
-                  <PencilIcon size={20} />
-                  Edit Profile
-                </button>
-              </Popover.Panel>
-            </Popover>
+            {!id ? (
+              <Popover className="relative">
+                <Popover.Button>
+                  <MoreIcon
+                    size={30}
+                    className="text-rose-500 hover:text-rose-300"
+                  />
+                </Popover.Button>
+                <Popover.Panel className="absolute top-full right-0 bg-white shadow-main border border-gray-100 rounded">
+                  <button
+                    onClick={toggleAboutModal}
+                    className="text-rose-500 whitespace-nowrap p-3 flex items-center gap-2 hover:bg-rose-100"
+                  >
+                    <PencilIcon size={20} />
+                    Edit Profile
+                  </button>
+                </Popover.Panel>
+              </Popover>
+            ) : null}
           </div>
           <div className="flex flex-wrap items-center space-y-1 capitalize">
             {/* SMOKES */}
@@ -134,23 +136,25 @@ const Profile = ({ }: Props) => {
           </button>
           {showAdditional ? (
             <div className="space-y-5 py-5 relative">
-              <Popover className="absolute top-0 right-0">
-                <Popover.Button>
-                  <MoreIcon
-                    size={30}
-                    className="text-rose-500 hover:text-rose-300"
-                  />
-                </Popover.Button>
-                <Popover.Panel className="absolute top-full right-0 bg-white shadow-main border border-gray-100 rounded">
-                  <button
-                    onClick={toggleEssayModal}
-                    className="text-rose-500 whitespace-nowrap p-3 flex items-center gap-2 hover:bg-rose-100"
-                  >
-                    <PencilIcon size={20} />
-                    Edit My Essays
-                  </button>
-                </Popover.Panel>
-              </Popover>
+              {!id ? (
+                <Popover className="absolute top-0 right-0">
+                  <Popover.Button>
+                    <MoreIcon
+                      size={30}
+                      className="text-rose-500 hover:text-rose-300"
+                    />
+                  </Popover.Button>
+                  <Popover.Panel className="absolute top-full right-0 bg-white shadow-main border border-gray-100 rounded">
+                    <button
+                      onClick={toggleEssayModal}
+                      className="text-rose-500 whitespace-nowrap p-3 flex items-center gap-2 hover:bg-rose-100"
+                    >
+                      <PencilIcon size={20} />
+                      Edit My Essays
+                    </button>
+                  </Popover.Panel>
+                </Popover>
+              ) : null}
               <div className="[&>p]:text-sm [&>p]:text-gray-500">
                 <h6>Self Summary</h6>
                 <p>{data.data.essay0}</p>

@@ -40,7 +40,7 @@ const AppRouter = ({}: Props) => {
   return (
     <DashboardLayout>
       <Routes>
-        <Route element={<Dashboard />} path="/" />
+        <Route element={<Connections />} path="/*" />
         <Route element={<Profile />} path="/profile/:id" />
         <Route element={<Profile />} path="/profile" />
         <Route element={<AllConnections />} path="/connections/all" />

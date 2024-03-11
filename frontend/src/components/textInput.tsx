@@ -60,6 +60,7 @@ const TextInput = ({
           />
         ) : null}
         <input
+          autoComplete="off"
           name={name}
           type={type}
           value={value}
