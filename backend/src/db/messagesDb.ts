@@ -1,7 +1,7 @@
 import Db from "./db";
 
 class MessagesDb extends Db {
-  checkCoversationExists = async (data: {
+  public checkCoversationExists = async (data: {
     sender_id: number;
     recipient_id: number;
   }) => {
@@ -10,7 +10,7 @@ class MessagesDb extends Db {
     return result.rows[0]?.id || null;
   };
 
-  createConversation = async (data: {
+  public createConversation = async (data: {
     sender_id: number;
     recipient_id: number;
   }) => {
@@ -19,7 +19,7 @@ class MessagesDb extends Db {
     return result.rows[0]?.id || null;
   };
 
-  createMessage = async (data: {
+  public createMessage = async (data: {
     conversation_id: number;
     sender_id: number;
     content: string;
@@ -33,7 +33,7 @@ class MessagesDb extends Db {
     return result.rows[0] || null;
   };
 
-  getAllConversations = async (data: { user_id: number }) => {
+  public getAllConversations = async (data: { user_id: number }) => {
     const sql = `
     SELECT c.id, c.created_at, c.updated_at, 
       CASE 
@@ -61,13 +61,13 @@ class MessagesDb extends Db {
     return result.rows || null;
   };
 
-  getConversationById = async (conversation_id: number) => {
+  public getConversationById = async (conversation_id: number) => {
     let sql = `SELECT * FROM "Conversations" WHERE id = $1;`;
     let result = await this.query(sql, [conversation_id]);
     return result.rows[0] || null;
   };
 
-  getWholeConversationById = async (conversation_id: number) => {
+  public getWholeConversationById = async (conversation_id: number) => {
     let sql = `
     SELECT *
     FROM "Messages" 
@@ -78,7 +78,7 @@ class MessagesDb extends Db {
     return result.rows || null;
   };
 
-  getConversationsByUserId = async (user_id: number) => {
+  public getConversationsByUserId = async (user_id: number) => {
     let sql = `SELECT * FROM "Conversations" WHERE user1_id = $1 OR user2_id = $1;`;
     let result = await this.query(sql, [user_id]);
     return result.rows || null;

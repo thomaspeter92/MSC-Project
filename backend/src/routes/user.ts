@@ -3,15 +3,19 @@ import userController from "../controllers/user";
 import multer from "multer";
 
 const upload = multer();
+/**
+ * TODO:
+ *  - ADD VALIDATION MIDDLEWARE TO ROUTES
+ */
 
 export const userRouter: Router = Router();
 
-userRouter.get("/all", userController.getAllUsers);
+// userRouter.get("/all", userController.getAllUsers);
 
-userRouter.get("/:email", userController.getUser);
+// userRouter.get("/:email", userController.getUser);
 
 // get user profile
-userRouter.get("/profile/:id", userController.getUserProfileById);
+// userRouter.get("/profile/:id", userController.getUserProfileById);
 
 // create user
 userRouter.post("/signup", userController.handleSignUp);
@@ -20,14 +24,12 @@ userRouter.post("/signup", userController.handleSignUp);
 userRouter.post("/signin", userController.handleSignIn);
 
 // edit user
-userRouter.post(
-  "/updatePicture",
-  upload.single("image"),
-  userController.updateProfilePicture
-);
+// userRouter.post(
+//   "/updatePicture",
+//   upload.single("image"),
+//   userController.updateProfilePicture
+// );
 
-userRouter.post("/updateAboutInfo", userController.updateAboutMe);
+// userRouter.post("/updateAboutInfo", userController.updateAboutMe);
 
-userRouter.post("/updateEssays", userController.updateEssays);
-
-
+// userRouter.post("/updateEssays", userController.updateEssays);

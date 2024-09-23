@@ -1,0 +1,10 @@
+{
+  "port": 8080,
+  "db_config": {
+    "host": "aws-0-eu-west-2.pooler.supabase.com",
+    "port": 6543,
+    "user": "postgres.fxxqwotagugztamftphi",
+    "password": "HeliosChenThomasBuckley",
+    "database": "postgres"
+  }
+}

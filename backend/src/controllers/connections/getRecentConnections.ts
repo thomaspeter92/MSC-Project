@@ -1,7 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import { getBearerToken } from "../../utils/getBearerToken";
-import firebaseService from "../../lib/firebase/firebaseService";
-import prisma from "../../db/prisma";
+// import firebaseService from "../../lib/firebase/firebaseService";
 import respond from "../../utils/response";
 import userDb from "../../db/userDb";
 import ErrorResponse from "../../utils/errorResponse";
@@ -14,17 +13,19 @@ const getConnectionsList = async (
   try {
     // Verify the user
     const token = getBearerToken(req.headers.authorization || "");
-    const fbUser = await firebaseService.verifyToken(token ? token : "");
 
-    if (!fbUser) return next(new ErrorResponse(404, 11, "No user found"));
+    // DECRYPT & VERIFY TOKEN
+    // const fbUser = await firebaseService.verifyToken(token ? token : "");
 
-    const dbUser = await userDb.getUserByEmail(fbUser.email as string);
+    // if (!fbUser) return next(new ErrorResponse(404, 11, "No user found"));
+
+    // const dbUser = await userDb.getUserByEmail(fbUser.email as string);
 
     const limit = Number(req.query.limit);
 
-    const dbConnections = await connectionsDb.getConnections(dbUser.id, limit);
+    // const dbConnections = await connectionsDb.getConnections(dbUser.id, limit);
 
-    respond(res, "success", dbConnections);
+    // respond(res, "success", dbConnections);
   } catch (error) {
     next(error);
   }

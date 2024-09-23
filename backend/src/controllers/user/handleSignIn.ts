@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from "../../db/prisma";
 import ErrorResponse from "../../utils/errorResponse";
 import { getBearerToken } from "../../utils/getBearerToken";
-import firebaseService from "../../lib/firebase/firebaseService";
+// import firebaseService from "../../lib/firebase/firebaseService";
 import respond from "../../utils/response";
 import userDb from "../../db/userDb";
-
 
 const handleSignIn = async (
   req: Request,
@@ -13,21 +11,19 @@ const handleSignIn = async (
   next: NextFunction
 ) => {
   try {
-    const token = getBearerToken(req.headers.authorization || "");
-    const fbUser = await firebaseService.verifyToken(token ? token : "");
+    // FIND USER FROM DB (EMAIL),
+    const dbUser = await userDb.getUserByEmail(req.body.email as string);
+    if (!dbUser)
+      return next(new ErrorResponse(401, 11, "User not found in DB"));
 
+    // VALIDATE PASSWORD HASH.
 
-    // Decoded firebase token will hold user email, use this to find them from the db.
-    const dbUser = await userDb.getUserByEmail(fbUser.email as string)
-    if (!dbUser) return next(new ErrorResponse(401, 11, 'User not found in DB'))
+    // RETURN THE TOKEN
 
-    // if token is verified, get user data from the db and return it to the frontend, save in state/cookie/localstorage?
-    // also update the last_active value in the db with now()
-
-    respond(res, 'success', dbUser);
+    respond(res, "success", dbUser);
   } catch (error) {
     next(error);
   }
 };
 
-export default handleSignIn
+export default handleSignIn;

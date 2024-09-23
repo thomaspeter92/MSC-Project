@@ -1,20 +1,35 @@
 import pg from "pg";
+import { IServerConfig } from "../utils/config";
+import * as config from "../../server_config.json";
 
 class Db {
-  private pool = new pg.Pool({
-    host: "aws-0-eu-west-2.pooler.supabase.com",
-    port: 6543,
-    user: "postgres.fxxqwotagugztamftphi",
-    password: "HeliosChenThomasBuckley",
-    database: "postgres",
-  });
+  public serverConfig: IServerConfig = config;
+  private static connection: pg.Pool | null = null;
 
-  query = (sql: string, params: any[] = []) => {
-    return this.pool.query(sql, params);
-  };
+  constructor() {
+    this.dbConnect();
+  }
 
-  getDedicatedClient = () => {
-    return this.pool.connect();
+  public async dbConnect() {
+    try {
+      if (Db.connection) {
+        return Db.connection;
+      }
+      Db.connection = new pg.Pool({
+        host: config.db_config.host,
+        port: config.db_config.port,
+        user: config.db_config.user,
+        password: config.db_config.password,
+        database: config.db_config.database,
+      });
+      console.log("Connected to the DB");
+    } catch (error) {}
+  }
+
+  public query = (sql: string, params: any[] = []) => {
+    if (Db.connection) {
+      return Db.connection.query(sql, params);
+    }
   };
 }
 

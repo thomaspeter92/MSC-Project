@@ -1,8 +1,8 @@
-import prisma from "../../db/prisma";
 import { NextFunction, Request, Response } from "express";
 import ErrorResponse from "../../utils/errorResponse";
 import respond from "../../utils/response";
 import userDb from "../../db/userDb";
+
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const email = req.params.email || null;
