@@ -4,6 +4,9 @@ import { getBearerToken } from "../../utils/getBearerToken";
 // import firebaseService from "../../lib/firebase/firebaseService";
 import respond from "../../utils/response";
 import userDb from "../../db/userDb";
+import { bcryptCompare } from "../../utils/jwt";
+import * as jwt from "jsonwebtoken";
+import { SERVER_CONST } from "../../utils/jwt";
 
 const handleSignIn = async (
   req: Request,
@@ -11,16 +14,29 @@ const handleSignIn = async (
   next: NextFunction
 ) => {
   try {
+    const { email, password } = req.body;
+
     // FIND USER FROM DB (EMAIL),
-    const dbUser = await userDb.getUserByEmail(req.body.email as string);
+    const dbUser = await userDb.getUserByEmail(email as string);
     if (!dbUser)
-      return next(new ErrorResponse(401, 11, "User not found in DB"));
+      return next(new ErrorResponse(404, 11, "User not found in DB"));
 
     // VALIDATE PASSWORD HASH.
+    const passwordsMatch = bcryptCompare(password, dbUser.password);
+    if (!passwordsMatch)
+      return next(new ErrorResponse(400, 11, "Unauthorized"));
+
+    // GENERATE ACCESS TOKEN
+    // Generate access and refresh token
+    const accessToken: string = jwt.sign(
+      { email: dbUser.email, username: dbUser.username },
+      SERVER_CONST.JWTSECRET,
+      { expiresIn: SERVER_CONST.ACCESS_TOKEN_EXPIRY_TIME_SECONDS }
+    );
 
     // RETURN THE TOKEN
 
-    respond(res, "success", dbUser);
+    respond(res, "success", accessToken);
   } catch (error) {
     next(error);
   }

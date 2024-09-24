@@ -20,9 +20,7 @@ const handleSignUp = async (
   next: NextFunction
 ) => {
   try {
-    // let fbUser = null;
     let dbUser = null;
-
     // validate inputs
     const user: SignUpRequestBody = req.body;
 

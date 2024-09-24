@@ -1,6 +1,13 @@
 import Db from "./db";
 
 class UserDb extends Db {
+  public getAllUsers = async () => {
+    let sql = 'SELECT * FROM "User" LIMIT 100;';
+    let result = await this.query(sql);
+    console.log("res", result);
+    return result.rows;
+  };
+
   public getUserByEmail = async (email: string) => {
     let sql = 'SELECT * FROM "User" WHERE email = $1;';
     let result = await this.query(sql, [email]);

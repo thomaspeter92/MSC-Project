@@ -10,20 +10,30 @@ const updateAboutMe = async (
   next: NextFunction
 ) => {
   try {
-    // const token = getBearerToken(req.headers.authorization || "");
-    // const fbUser = await firebaseService.verifyToken(token ? token : "");
-    // const requestBody = req.body;
-    // let dbUser = await userDb.getUserByEmail(fbUser.email as string);
-    // if (dbUser) {
-    //   await userDb.updateAboutInfo({ ...requestBody, id: dbUser.id });
-    // }
-    // // Check if all the about info is complete, then change user table to 'complete'
-    // let unfinished = await userDb.getUnfinishedProfile(dbUser.id);
-    // if (!unfinished) {
-    //   // update user table to complete
-    //   await userDb.updateUserComplete(dbUser.id);
-    // }
-    // respond(res, "Success", []);
+    const requestBody = req.body;
+
+    if (req.user.email !== requestBody.email) {
+      res
+        .status(401)
+        .json({ statusCode: 401, status: "error", message: "Not permitted" });
+    }
+
+    // first confirm the user exsits in the DB
+    const dbUser = await userDb.getUserByEmail(req.user.email as string);
+    if (dbUser) {
+      const updatedUser = await userDb.updateAboutInfo({
+        ...requestBody,
+        id: dbUser.id,
+      });
+
+      // Check if all the about info is complete, then change user table to 'complete'
+      let unfinished = await userDb.getUnfinishedProfile(dbUser.id);
+      if (!unfinished) {
+        // update user table to complete
+        await userDb.updateUserComplete(dbUser.id);
+      }
+      respond(res, "Success", updatedUser);
+    }
   } catch (error) {
     next(error);
   }
