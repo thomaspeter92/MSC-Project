@@ -19,7 +19,7 @@ app.use(express.json());
 
 // MOUNT ROUTERS
 app.use("/api/v1/user", userRouter);
-// app.use("/api/v1/connections", connectionsRouter)
+app.use("/api/v1/connections", connectionsRouter);
 // app.use('/api/v1/messages', messagesRouter)
 
 // SECOND MIDDLEWARE (must be mounted after the routers)

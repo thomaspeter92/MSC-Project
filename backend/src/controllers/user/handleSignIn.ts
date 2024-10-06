@@ -14,12 +14,17 @@ const handleSignIn = async (
   next: NextFunction
 ) => {
   try {
+    console.log("REQUEST");
+
     const { email, password } = req.body;
+    console.log(email, password);
 
     // FIND USER FROM DB (EMAIL),
     const dbUser = await userDb.getUserByEmail(email as string);
     if (!dbUser)
       return next(new ErrorResponse(404, 11, "User not found in DB"));
+
+    console.log(dbUser);
 
     // VALIDATE PASSWORD HASH.
     const passwordsMatch = bcryptCompare(password, dbUser.password);

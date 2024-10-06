@@ -10,9 +10,15 @@ const getUserProfileById = async (
   next: NextFunction
 ) => {
   try {
-    const user = await userDb.getUserProfile(Number(req.params.id));
+    const id = Number(req.params.id) || Number(req.user.userId);
+
+    console.log("HELLLOOOOOOO", id);
+
+    const user = await userDb.getUserProfile(id);
 
     if (!user) return next(new ErrorResponse(404, 11, "No user found"));
+
+    delete user.password;
 
     respond(res, "Success", user);
   } catch (error) {

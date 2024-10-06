@@ -21,8 +21,9 @@ const Profile = ({}: Props) => {
   const { id } = useParams();
   const [user] = useUserStore((state) => [state.user]);
   const { data, isFetching } = useQuery({
-    queryKey: ['profile', id ? id : user.id],
-    queryFn: () => getUserProfile(id ? id : user.id),
+    queryKey: ['profile', id ? id : ''],
+    queryFn: () => getUserProfile(id ? id : ''),
+    retry: false,
   });
   const [showAdditional, setShowAdditional] = useState<boolean>(true);
   const { open: aboutModalOpen, toggleModal: toggleAboutModal } =

@@ -3,6 +3,7 @@ import ErrorResponse from "../../utils/errorResponse";
 import respond from "../../utils/response";
 import { getBearerToken } from "../../utils/getBearerToken";
 import userDb from "../../db/userDb";
+import connectionsDb from "../../db/connectionsDb";
 
 const getConnections = async (
   req: Request,
@@ -10,24 +11,46 @@ const getConnections = async (
   next: NextFunction
 ) => {
   try {
-    // Verify the user
-    const token = getBearerToken(req.headers.authorization || "");
+    // get user from req
+    const { user } = req || null;
 
-    // DECRYPT & VERIFY TOKEN
-    // const fbUser = await firebaseService.verifyToken(token ? token : "");
+    const dbUser = await userDb.getUserByEmail(user.email as string);
+    if (!dbUser)
+      return next(new ErrorResponse(401, 11, "User not found in DB"));
 
-    // Decoded firebase token will hold user email, use this to find them from the db.
-    // const dbUser = await userDb.getUserByEmail(fbUser.email as string);
-    // if (!dbUser)
-    //   return next(new ErrorResponse(401, 11, "User not found in DB"));
+    const { sex, orientation } = dbUser;
 
-    // const userId = dbUser.id;
+    let sexToSearch, orientationToSearch;
+    if (dbUser.sex === "m") {
+      if (dbUser.orientation === "gay") {
+        sexToSearch = "m";
+        orientationToSearch = "gay";
+      } else {
+        sexToSearch = "f";
+        orientationToSearch = "straight";
+      }
+    } else if (dbUser.sex === "f") {
+      if (dbUser.orientation === "gay") {
+        sexToSearch = "f";
+        orientationToSearch = "gay";
+      } else {
+        sexToSearch = "m";
+        orientationToSearch = "straight";
+      }
+    }
 
-    // CHANGE HERE. USED TO USE PYTHON SERVICE, CHANGE TO GAB FIRST 10 ACCOUNTS THAT SATISFY FILTER OR SOMETHING
-    // const users = await userDb.getListOfUsers();
+    const recommendations = await connectionsDb.getRecommendations(
+      user.userId,
+      sexToSearch,
+      orientationToSearch
+    );
 
-    // respond(res, "Success", users);
+    // Remove password from response
+    recommendations.forEach((d) => delete d.password);
+
+    respond(res, "Success", recommendations);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

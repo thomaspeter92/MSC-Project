@@ -5,6 +5,7 @@ declare namespace Express {
       email?: string;
       userId?: string;
     };
+
     // Add other properties needed
   }
 }

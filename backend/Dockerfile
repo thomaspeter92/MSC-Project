@@ -16,7 +16,7 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json (or yarn.lock) into the container
 COPY package*.json ./
 
-COPY prisma ./prisma/
+
 
 # Install dependencies
 # Note: Using npm ci is recommended in production environments for faster, more reliable builds

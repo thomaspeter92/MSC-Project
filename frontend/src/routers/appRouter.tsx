@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard';
 import DashboardLayout from '../components/layout/dashboardLayout';
 import Profile from '../pages/Profile';
 import Connections from '../pages/Connections';
@@ -10,7 +9,6 @@ import { getUser } from '../services/userService';
 import { useUserStore } from '../stores/userStore';
 import FullMessage from '../pages/Messages/FullMessage';
 import { useEffect } from 'react';
-import { getUserToken } from '../services/firebaseService';
 import socketEventManager from '../services/socketsService';
 import AllConnections from '../pages/AllConnections';
 type Props = {};
@@ -27,7 +25,7 @@ const AppRouter = ({}: Props) => {
   // Example component or application initialization logic
   useEffect(() => {
     const initializeSockets = async () => {
-      const token = await getUserToken();
+      const token = '';
       if (token) {
         await socketEventManager.initSocket(token);
         // Optionally, listen for messages globally, manage state, notifications, etc.

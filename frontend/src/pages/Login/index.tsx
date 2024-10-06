@@ -1,13 +1,13 @@
-import GoogleButton from "../../components/googleButton";
-import TextInput from "../../components/textInput";
-import { useUserStore } from "../../stores/userStore";
-import Button from "../../components/button";
-import { useFormik } from "formik";
-import { signInValidator } from "../../lib/validations/userValidation";
+import GoogleButton from '../../components/googleButton';
+import TextInput from '../../components/textInput';
+import { useUserStore } from '../../stores/userStore';
+import Button from '../../components/button';
+import { useFormik } from 'formik';
+import { signInValidator } from '../../lib/validations/userValidation';
 
 type Props = {};
 
-const Login = ({ }: Props) => {
+const Login = ({}: Props) => {
   const [signIn, loginFailed] = useUserStore((state) => [
     state.signIn,
     state.loginFailed,
@@ -17,14 +17,12 @@ const Login = ({ }: Props) => {
     validateOnBlur: false,
     validateOnChange: false,
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: signInValidator,
     onSubmit: ({ email, password }) => signIn(email, password),
   });
-
-
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -53,10 +51,12 @@ const Login = ({ }: Props) => {
           onChange={formik.handleChange}
           error={formik.errors.password}
         />
-        <Button size="lg" className="w-full" type="submit">Sign In</Button>
+        <Button size="lg" className="w-full" type="submit">
+          Sign In
+        </Button>
         <hr />
         <p className="text-center">
-          Don't have an account yet?{" "}
+          Don't have an account yet?{' '}
           <a className="font-bold text-rose-400" href="/signup">
             Sign Up
           </a>

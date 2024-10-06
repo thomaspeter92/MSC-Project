@@ -1,10 +1,5 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  Canceler,
-} from "axios";
-import { getUserToken } from "./firebaseService";
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { useUserStore } from '../stores/userStore';
 
 interface ApiResponse<T> {
   code: number;
@@ -13,14 +8,14 @@ interface ApiResponse<T> {
 }
 
 const axiosParams = {
-  baseURL: "http://127.0.0.1:8080/api/v1/",
+  baseURL: 'http://localhost:8080/api/v1/',
 };
 
 const axiosInstance: AxiosInstance = axios.create(axiosParams);
 
 axiosInstance.interceptors.request.use(async (req) => {
-  const token = await getUserToken();
-  console.log(token);
+  const { user: token } = useUserStore.getState();
+  req.headers['Content-Type'] = 'application/json';
   if (token) {
     req.headers.Authorization = `Bearer ${token}`;
   }
@@ -32,7 +27,7 @@ const handleApiResponse = (res: any) => {
   if (res.data) {
     return res.data;
   } else {
-    throw new Error("failed");
+    throw new Error('failed');
   }
 };
 
@@ -45,7 +40,7 @@ const api = (axios: AxiosInstance) => {
     post: async <T>(
       url: string,
       body: any,
-      config: AxiosRequestConfig = {},
+      config: AxiosRequestConfig = {}
     ) => {
       const res = await axios.post<ApiResponse<T>>(url, body, config);
       return handleApiResponse(res);

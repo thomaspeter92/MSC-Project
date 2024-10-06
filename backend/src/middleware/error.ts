@@ -11,9 +11,9 @@ const errorHandler = (
   let error: ErrorResponse;
 
   // Send the error to client
-  res.status(error.statusCode || 500).json({
-    errorCode: error.errorCode || 500,
-    message: error.message || "Something went wrong",
+  res.status(error?.statusCode || 500).json({
+    errorCode: error?.errorCode || 500,
+    message: error?.message || "Something went wrong",
   });
 };
 

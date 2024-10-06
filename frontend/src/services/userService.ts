@@ -1,7 +1,10 @@
 import api from './api';
 
-export const signIn = () => {
-  return api.post('/user/signin', {});
+export const signIn = (email: string, password: string) => {
+  return api.post(
+    '/user/signin',
+    JSON.stringify({ email: email, password: password })
+  );
 };
 
 export const signUp = (body: {}) => {

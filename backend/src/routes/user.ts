@@ -22,7 +22,7 @@ userRouter.get("/all", authorize, userController.getAllUsers);
 userRouter.get("/:email", authorize, userController.getUser);
 
 // get user profile
-userRouter.get("/profile/:id", authorize, userController.getUserProfileById);
+userRouter.get("/profile/:id?", authorize, userController.getUserProfileById);
 
 // edit user
 userRouter.post(
