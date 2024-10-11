@@ -19,10 +19,10 @@ userRouter.post("/signin", userController.handleSignIn);
 
 userRouter.get("/all", authorize, userController.getAllUsers);
 
-userRouter.get("/:email", authorize, userController.getUser);
-
 // get user profile
 userRouter.get("/profile/:id?", authorize, userController.getUserProfileById);
+
+userRouter.get("/:email", authorize, userController.getUser);
 
 // edit user
 userRouter.post(

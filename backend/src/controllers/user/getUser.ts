@@ -5,11 +5,13 @@ import userDb from "../../db/userDb";
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const email = req.params.email || null;
+    const email = req.user?.email;
 
     if (!email) return next(new ErrorResponse(400, 40, "No email provided"));
 
     const user = await userDb.getUserByEmail(email);
+
+    if (user) delete user.password;
 
     if (!user)
       res

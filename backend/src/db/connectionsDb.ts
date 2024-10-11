@@ -21,7 +21,7 @@ class ConnectionsDb extends Db {
       AND c.target_id IS NULL
       AND u.sex = $2
       AND u.orientation = $3
-      LIMIT 10;`;
+      LIMIT 1;`;
     let result = await this.query(sql, [
       user_id,
       sexToSearch,

@@ -18,19 +18,17 @@ const getConnections = async (
     if (!dbUser)
       return next(new ErrorResponse(401, 11, "User not found in DB"));
 
-    const { sex, orientation } = dbUser;
-
     let sexToSearch, orientationToSearch;
-    if (dbUser.sex === "m") {
-      if (dbUser.orientation === "gay") {
+    if (dbUser?.sex === "m") {
+      if (dbUser?.orientation === "gay") {
         sexToSearch = "m";
         orientationToSearch = "gay";
       } else {
         sexToSearch = "f";
         orientationToSearch = "straight";
       }
-    } else if (dbUser.sex === "f") {
-      if (dbUser.orientation === "gay") {
+    } else if (dbUser?.sex === "f") {
+      if (dbUser?.orientation === "gay") {
         sexToSearch = "f";
         orientationToSearch = "gay";
       } else {
